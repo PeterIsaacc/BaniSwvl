@@ -1,11 +1,24 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
+    static User admin1 = new Admin(new Info("shehab","010000000","0000000000","00"));
+    static User admin2 = new Admin(new Info("peter","010000000","0000000000","00"));
+    static User admin3 = new Admin(new Info("david","010000000","0000000000","00"));
+    static User admin4 = new Admin(new Info("abdallah","010000000","0000000000","00"));
+
+    Map<String, User> database = new HashMap<String, User>();
     static system system = new system();
     static User currentUser = null;
     static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
+        system.addAdmin(admin1);
+        system.addAdmin(admin2);
+        system.addAdmin(admin3);
+        system.addAdmin(admin4);
+
         while (true) {
             while (currentUser == null) {
                 System.out.println("""
@@ -102,6 +115,31 @@ public class Main {
                     }
 
                 }
+                else if(currentUser instanceof Admin)
+                {
+                    displayAdminMenu();
+                    int choice = input.nextInt();
+                    input.nextLine();
+                    switch (choice)
+                    {
+                        case 1->{
+                            system.listPendingDrivers();
+                        }
+                        case 2-> {
+                            system.listAllUsers();
+                        }
+                        case 3-> {
+                            AdminAcceptingDriver();
+                        }
+                        case 4-> {
+                            AdminSuspendingUser();
+                        }
+                        case 5-> {
+                            currentUser = null;
+                        }
+
+                    }
+                }
             }
         }
     }
@@ -176,6 +214,41 @@ public class Main {
             if(success) System.out.println("Offer made successfully");
             else System.out.println("invalid index");
         }
+    }
+    public static void displayAdminMenu()
+    {
+        System.out.println("1- to list all pending drivers enter 1");
+        System.out.println("2- to list all users enter 2");
+        System.out.println("3- to accept a driver request enter 3");
+        System.out.println("4- to suspend a user enter 4");
+        System.out.println("5- to logout enter 5");
+
+    }
+    public static void AdminAcceptingDriver()
+    {
+        Admin admin = (Admin) currentUser;
+        system.listPendingDrivers();
+        System.out.println();
+        System.out.println("Enter driver username you want to accept: ");
+        String userName = input.nextLine();
+        admin.verfiyDriverRegistration(userName, system.getPendingDrivers());
+        System.out.println("Driver " + userName + " is accepted");
+    }
+    public static void AdminSuspendingUser()
+    {
+        system.listAllUsers();
+        System.out.println("Enter user name you want to suspend");
+        String userName = input.nextLine();
+        User user = system.getUser(userName);
+        if(user instanceof Admin)
+        {
+            System.out.println("You cant suspend an admin!");
+            System.out.println();
+            return;
+        }
+        Admin admin = (Admin) currentUser;
+        admin.suspendUser(user);
+        System.out.println("User " + userName +" is suspended");
     }
 }
 

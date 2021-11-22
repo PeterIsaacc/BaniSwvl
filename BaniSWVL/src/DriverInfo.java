@@ -6,4 +6,10 @@ public class DriverInfo extends Info {
         this.driverLicense = driverLicense;
         this.nationalId = nationalId;
     }
+
+    public String toString()
+    {
+        return String.format("user name: " + getUserName() + "\nmobile number: " + getMobileNumber() + "\nEmail: "
+                + getEmail() + "\nnational Id: " + nationalId + "\ndriver license: " + driverLicense);
+    }
 }

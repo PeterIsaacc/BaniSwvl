@@ -36,9 +36,6 @@ public class Driver extends User{
         driverState  = State.Pending;
         avgRating = 0;
     }
-    public void menu(){
-        System.out.println("this is driver");
-    }
     public void addArea(String area)
     {
         areas.add(area);
@@ -131,6 +128,13 @@ public class Driver extends User{
     public void setState(State state)
     {
         this.driverState = state;
+    }
+    public String toString()
+    {
+        String string = "--Driver--\n";
+        string+=getUserData().toString();
+        string+=("\ndriver state: " + driverState);
+        return string;
     }
 
 }

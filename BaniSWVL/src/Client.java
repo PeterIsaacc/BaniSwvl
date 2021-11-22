@@ -16,9 +16,7 @@ public class Client extends User {
         super(userData);
         rideRequests = new ArrayList<RideRequest>();
         offers = new ArrayList<Offer>();
-    }
-    public void menu(){
-        System.out.println("this is client");
+        state = State.Accepted;
     }
     public RideRequest rideRequest(String source, String destination)
     {
@@ -59,6 +57,13 @@ public class Client extends User {
         {
             System.out.println(offers.get(i));
         }
+    }
+    public String toString()
+    {
+        String string = "--Client--\n";
+        string+=this.getUserData().toString();
+        string+=("\nState: " + state);
+        return string;
     }
 }
 

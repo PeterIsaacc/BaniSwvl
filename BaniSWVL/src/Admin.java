@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 import java.util.Map;
 
-public class admin extends User{
-    ArrayList<Driver> pendingDrivers;
-    public admin(Info userData) {
+public class Admin extends User{
+    public Admin(Info userData) {
         super(userData);
     }
 
-    public void verfiyDriverRegistration(String driverUserName)
+    public void verfiyDriverRegistration(String driverUserName, ArrayList<Driver> pendingDrivers)
     {
         for(int i = 0; i < pendingDrivers.size(); i++)
         {
@@ -20,16 +19,7 @@ public class admin extends User{
             }
         }
     }
-    public void listPendingDrivers()
-    {
-        if(pendingDrivers.size() == 0)
-        {
-            System.out.println("no pending drivers exist");
-            return;
-        }
-        for(int i = 0; i < pendingDrivers.size(); i++)
-            System.out.println(pendingDrivers.get(i).getUserData().getUserName());
-    }
+
     public void suspendUser(User user)
     {
         if(user instanceof Client)
@@ -41,7 +31,10 @@ public class admin extends User{
             ((Driver) user).setState(State.Suspended);
         }
     }
-    public void menu(){
-        System.out.println("this is admin");
+    public String toString()
+    {
+        String string = "--Admin--\n";
+        string+=this.getUserData().toString();
+        return string;
     }
 }
