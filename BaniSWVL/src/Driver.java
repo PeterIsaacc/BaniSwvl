@@ -8,6 +8,7 @@ public class Driver extends User{
     private double avgRating;
     private ArrayList<UserRating> userRatings;
     private ArrayList<RideRequest> rideRequests;
+    private ArrayList<Offer> offers;
     private State driverState;
 
     public boolean isAvailable() {
@@ -27,7 +28,12 @@ public class Driver extends User{
     }
 
     public Driver(Info userData) {
-        super(userData);areas = new HashSet<String>();
+        super(userData);
+        areas = new HashSet<String>();
+        rideRequests = new ArrayList<RideRequest>();
+        userRatings = new ArrayList<UserRating>();
+        offers = new ArrayList<Offer>();
+        avgRating = 0;
     }
     public void menu(){
         System.out.println("this is driver");
@@ -38,18 +44,43 @@ public class Driver extends User{
     }
     public void listUserRatings()
     {
-        for(int i = 0; i < userRatings.size(); i++)
+        if(userRatings.size() == 0)
+        {
+            System.out.println("no user ratings exist yet");
+            System.out.println();
+            return;
+        }
+        for(int i = 0; i < userRatings.size(); i++) {
             System.out.println(userRatings.get(i));
+            System.out.println();
+        }
     }
-    public void listRides(){
+    public boolean listRides(){
+        if(rideRequests.size() == 0) {
+            System.out.println("no rides exist yet");
+            System.out.println();
+            return true;
+        }
         for(int i = 0; i < rideRequests.size(); i++)
         {
             System.out.println(rideRequests.get(i));
+            System.out.println();
         }
+        return false;
     }
     public void addRating(UserRating rating)
     {
+        for(int i = 0; i < userRatings.size(); i++)
+        {
+            if(rating.getUserName() == userRatings.get(i).getUserName())
+            {
+                userRatings.set(i,rating);
+                calculateAvgRating();
+                return;
+            }
+        }
         userRatings.add(rating);
+        calculateAvgRating();
     }
     public void addRideRequest(RideRequest rideRequest)
     {
@@ -57,11 +88,44 @@ public class Driver extends User{
     }
     public Offer makeOffer(RideRequest rideRequest, double price)
     {
-        return new Offer(rideRequest,price);
+        Offer offer= new Offer(rideRequest,price, getUserData().getUserName(), avgRating);
+        offers.add(offer);
+        return offer;
+    }
+    public void listOffers()
+    {
+        if(offers.size() == 0)
+        {
+            System.out.println("no offers exist yet");
+            System.out.println();
+            return;
+        }
+        for (int i = 0; i < offers.size(); i++)
+        {
+            System.out.println(offers.get(i));
+            System.out.println();
+        }
     }
     public boolean containArea(String area)
     {
         return areas.contains(area);
+    }
+    public ArrayList<RideRequest> getRideRequests()
+    {
+        return rideRequests;
+    }
+    public void addOffer(Offer offer)
+    {
+        offers.add(offer);
+    }
+    private void calculateAvgRating()
+    {
+        int sum = 0;
+        for(int i = 0; i < userRatings.size();i++)
+        {
+            sum+=userRatings.get(i).getRating();
+        }
+        avgRating = (double) sum/userRatings.size();
     }
 
 

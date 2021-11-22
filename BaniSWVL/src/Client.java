@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+
 public class Client extends User {
     private State state;
-
+    private ArrayList<Offer> offers;
+    private ArrayList<RideRequest> rideRequests;
     public State getState() {
         return state;
     }
@@ -11,17 +14,51 @@ public class Client extends User {
 
     public Client(Info userData) {
         super(userData);
+        rideRequests = new ArrayList<RideRequest>();
+        offers = new ArrayList<Offer>();
     }
     public void menu(){
         System.out.println("this is client");
     }
     public RideRequest rideRequest(String source, String destination)
     {
-        return new RideRequest(source,destination, getUserData().getUserName());
+        RideRequest rideRequest = new RideRequest(source,destination, getUserData().getUserName());
+        rideRequests.add(rideRequest);
+        return rideRequest;
     }
     public UserRating rateDriver(int rating, String comment)
     {
         return new UserRating(getUserData().getUserName(), rating, comment);
+    }
+    public void addOffer(Offer offer)
+    {
+        offers.add(offer);
+    }
+    public void addRideRequest(RideRequest rideRequest)
+    {
+        rideRequests.add(rideRequest);
+    }
+    public void listRideRequests(){
+        if(rideRequests.size() == 0) {
+            System.out.println("no rides exist yet");
+            return;
+        }
+        for(int i = 0; i < rideRequests.size(); i++)
+        {
+            System.out.println(rideRequests.get(i));
+        }
+    }
+    public void listOffers()
+    {
+        if(offers.size() == 0)
+        {
+            System.out.println("no offers exist yet");
+            return;
+        }
+        for (int i = 0; i < offers.size(); i++)
+        {
+            System.out.println(offers.get(i));
+        }
     }
 }
 

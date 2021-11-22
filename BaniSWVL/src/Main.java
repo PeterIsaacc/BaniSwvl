@@ -57,6 +57,7 @@ public class Main {
                 {
                     displayClientMenu();
                     int choice = input.nextInt();
+                    input.nextLine();
                     switch (choice)
                     {
                         case 1->{
@@ -66,6 +67,9 @@ public class Main {
                             clientRatingDriver();
                         }
                         case 3-> {
+                            ((Client) currentUser).listOffers();
+                        }
+                        case 4-> {
                             currentUser = null;
                         }
                         default -> throw new IllegalStateException("Unexpected value: " + choice);
@@ -76,6 +80,7 @@ public class Main {
                 {
                     displayDriverMenu();
                     int choice = input.nextInt();
+                    input.nextLine();
                     switch (choice)
                     {
                         case 1-> {
@@ -84,7 +89,15 @@ public class Main {
                         case 2-> {
                             ((Driver) currentUser).listUserRatings();
                         }
-
+                        case 3-> {
+                            driverListingRides();
+                        }
+                        case  4-> {
+                            ((Driver) currentUser).listOffers();
+                        }
+                        case 5-> {
+                            currentUser = null;
+                        }
                         default -> throw new IllegalStateException("Unexpected value: " + choice);
                     }
 
@@ -96,7 +109,8 @@ public class Main {
     {
         System.out.println("1- to request a ride enter 1");
         System.out.println("2- to rate a driver enter 2");
-        System.out.println("3- to logout enter 3");
+        System.out.println("3- to list offers enter 3");
+        System.out.println("4- to logout enter 4");
     }
     public static void clientRequestingRide()
     {
@@ -116,6 +130,7 @@ public class Main {
         String userName = input.nextLine();
         System.out.println("Enter rating from 1 to 5");
         int rating = input.nextInt();
+        input.nextLine();
         System.out.println("Enter a comment:");
         String comment = input.nextLine();
 
@@ -129,6 +144,9 @@ public class Main {
     {
         System.out.println("1- to add an area enter 1");
         System.out.println("2- to list user ratings enter 2");
+        System.out.println("3- to list rides or make an offer enter 3");
+        System.out.println("4- to list offer you made");
+        System.out.println("5- to logout enter 5");
     }
     public static void driverAddingArea()
     {
@@ -138,6 +156,26 @@ public class Main {
         boolean success = system.addAreaToDriver(area,(Driver)currentUser);
         if(success) System.out.println("Area is added to your list");
         else System.out.println("Area already exists");
+    }
+    public static void driverListingRides()
+    {
+        Driver driver = (Driver) currentUser;
+        boolean empty = driver.listRides();
+        if(empty) return;
+        System.out.println("Do you want to make an offer ? (y/n)");
+        String choice = input.nextLine();
+        if(choice.equals("y"))
+        {
+            System.out.println("Which ride you want to make an offer to ? (enter an index starting from 1)");
+            int index = input.nextInt();
+            index--;
+            System.out.println("Enter price: ");
+            double price = input.nextDouble();
+            input.nextLine();
+            boolean success = system.driverMakingOffer((Driver) currentUser,index,price);
+            if(success) System.out.println("Offer made successfully");
+            else System.out.println("invalid index");
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,10 +10,12 @@ public class system {
 
     public system(Map<String, User> userDatabase) {
         this.userDatabase = userDatabase;
+        AreaToDriverMap = new HashMap<String,ArrayList<String>>();
     }
 
     public system() {
         userDatabase = new HashMap<>();
+        AreaToDriverMap = new HashMap<String,ArrayList<String>>();
     }
 
     public User login(String username, String password) {
@@ -72,8 +75,7 @@ public class system {
             return false;
         driver.addArea(area);
         String username = driver.getUserData().getUserName();
-
-        if(AreaToDriverMap.containsKey(area))
+        if(!AreaToDriverMap.containsKey(area))
         {
             ArrayList<String> drivers = new ArrayList<String>();
             drivers.add(username);
@@ -85,5 +87,17 @@ public class system {
         }
         return true;
     }
+    public boolean driverMakingOffer(Driver driver,int index, double price)
+    {
+        ArrayList<RideRequest> rideRequests = driver.getRideRequests();
+        if(index >= rideRequests.size()) return false;
+        RideRequest rideRequest = rideRequests.get(index);
+        Offer offer = driver.makeOffer(rideRequest,price);
+        Client cl = (Client) userDatabase.get(rideRequest.getClientUserName());
+        cl.addOffer(offer);
+        rideRequests.remove(index);
+        return true;
+    }
+
 
 }
