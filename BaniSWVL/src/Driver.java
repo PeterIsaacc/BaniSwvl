@@ -33,6 +33,7 @@ public class Driver extends User{
         rideRequests = new ArrayList<RideRequest>();
         userRatings = new ArrayList<UserRating>();
         offers = new ArrayList<Offer>();
+        driverState  = State.Pending;
         avgRating = 0;
     }
     public void menu(){
@@ -127,6 +128,9 @@ public class Driver extends User{
         }
         avgRating = (double) sum/userRatings.size();
     }
-
+    public void setState(State state)
+    {
+        this.driverState = state;
+    }
 
 }
