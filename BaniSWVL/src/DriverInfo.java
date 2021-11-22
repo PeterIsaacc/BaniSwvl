@@ -1,8 +1,7 @@
-public class driverInfo extends Info {
+public class DriverInfo extends Info {
     private String driverLicense;
     private String nationalId;
-
-    public driverInfo(Info data, String driverLicense, String nationalId) {
+    public DriverInfo(Info data, String driverLicense, String nationalId) {
         super(data);
         this.driverLicense = driverLicense;
         this.nationalId = nationalId;
