@@ -1,3 +1,4 @@
+package Users;
 
 public abstract class  User {
     private Info userData;
@@ -15,8 +16,7 @@ public abstract class  User {
         return userData;
     }
 
-    public abstract void menu();
-
+    public abstract String toString();
     public void setUserData(Info userData) {
         this.userData = userData;
     }

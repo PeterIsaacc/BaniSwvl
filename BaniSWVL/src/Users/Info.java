@@ -1,3 +1,5 @@
+package Users;
+
 public class Info {
     private String userName;
     private String mobileNumber;
@@ -16,7 +18,10 @@ public class Info {
         this.email = data.email;
         this.password = data.password;
     }
-
+    public String toString()
+    {
+        return ("user name: " + userName + "\nmobile number: " + mobileNumber + "\nEmail: " + email);
+    }
     public String getUserName() {
         return userName;
     }
