@@ -17,7 +17,7 @@ public class Main {
     Map<String, User> database = new HashMap<String, User>();
     static MainSystem system = new MemorySystem();
     static User currentUser = null;
-    static Scanner input = new Scanner(System.in);
+    public static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
         system.addAdmin(admin1);
@@ -75,76 +75,14 @@ public class Main {
                     default -> throw new IllegalStateException("Unexpected value: " + input.nextInt());
                 }
             }
+
+            // hell
             while (currentUser != null) {
-                if (currentUser instanceof Client) {
-                    displayClientMenu();
-                    int choice = input.nextInt();
-                    input.nextLine();
-                    switch (choice) {
-                        case 1 -> {
-                            clientRequestingRide();
-                        }
-                        case 2 -> {
-                            clientRatingDriver();
-                        }
-                        case 3 -> {
-                            ((Client) currentUser).listOffers();
-                        }
-                        case 4 -> {
-                            currentUser = null;
-                        }
-                        default -> throw new IllegalStateException("Unexpected value: " + choice);
-                    }
-
-                } else if (currentUser instanceof Driver) {
-                    displayDriverMenu();
-                    int choice = input.nextInt();
-                    input.nextLine();
-                    switch (choice) {
-                        case 1 -> {
-                            driverAddingArea();
-                        }
-                        case 2 -> {
-                            ((Driver) currentUser).listUserRatings();
-                        }
-                        case 3 -> {
-                            driverListingRides();
-                        }
-                        case 4 -> {
-                            ((Driver) currentUser).listOffers();
-                        }
-                        case 5 -> {
-                            currentUser = null;
-                        }
-                        default -> throw new IllegalStateException("Unexpected value: " + choice);
-                    }
-
-                } else if (currentUser instanceof Admin) {
-                    displayAdminMenu();
-                    int choice = input.nextInt();
-                    input.nextLine();
-                    switch (choice) {
-                        case 1 -> {
-                            system.listPendingDrivers();
-                        }
-                        case 2 -> {
-                            system.listAllUsers();
-                        }
-                        case 3 -> {
-                            AdminAcceptingDriver();
-                        }
-                        case 4 -> {
-                            AdminSuspendingUser();
-                        }
-                        case 5 -> {
-                            currentUser = null;
-                        }
-
-                    }
-                }
+                currentUser.displayMenu(system);
             }
         }
     }
+
 
     public static void displayClientMenu() {
         System.out.println("----------" + "Client Menu" + "----------");
@@ -186,16 +124,6 @@ public class Main {
         else System.out.println("no such driver exists");
     }
 
-    public static void displayDriverMenu() {
-        System.out.println("----------" + "Driver Menu" + "----------");
-        System.out.println("""
-                1. Add an area
-                2. List user ratings
-                3. List rides or make an offer
-                4. List offer you made
-                5. Logout
-                """);
-    }
 
     public static void driverAddingArea() {
         System.out.println("----------" + "Add Area" + "----------");

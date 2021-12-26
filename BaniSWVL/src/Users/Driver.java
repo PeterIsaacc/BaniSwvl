@@ -3,7 +3,9 @@ package Users;
 import Rides.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
+import System.*;
 
 public class Driver extends User {
     private Set<String> areas;
@@ -38,6 +40,39 @@ public class Driver extends User {
         offers = new ArrayList<Offer>();
         driverState = State.Pending;
         avgRating = 0;
+    }
+
+    public User displayMenu(MainSystem system) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("----------" + "Driver Menu" + "----------");
+        System.out.println("""
+                1. Add an area
+                2. List user ratings
+                3. List rides or make an offer
+                4. List offer you made
+                5. Logout
+                """);
+        int choice = input.nextInt();
+        input.nextLine();
+        switch (choice) {
+            case 1 -> {
+                driverAddingArea();
+            }
+            case 2 -> {
+                ((Driver) currentUser).listUserRatings();
+            }
+            case 3 -> {
+                driverListingRides();
+            }
+            case 4 -> {
+                ((Driver) currentUser).listOffers();
+            }
+            case 5 -> {
+                return null;
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + choice);
+        }
+        return this;
     }
 
     public void addArea(String area) {

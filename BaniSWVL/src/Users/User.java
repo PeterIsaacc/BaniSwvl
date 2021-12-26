@@ -1,5 +1,7 @@
 package Users;
 
+import System.*;
+
 public abstract class  User {
     private Info userData;
 
@@ -16,6 +18,7 @@ public abstract class  User {
         return userData;
     }
 
+    public abstract User displayMenu(MainSystem system);
     public abstract String toString();
     public void setUserData(Info userData) {
         this.userData = userData;
