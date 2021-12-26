@@ -2,19 +2,16 @@ package System;
 
 import Rides.*;
 import Users.*;
-
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-public class system {
+public class MemorySystem implements MainSystem {
     Map<String, User> userDatabase;
     Map<String, ArrayList<String>> AreaToDriverMap;
     ArrayList<Driver> pendingDrivers;
 
-    public system(Map<String, User> userDatabase) {
+    public MemorySystem(Map<String, User> userDatabase) {
         this.userDatabase = userDatabase;
         AreaToDriverMap = new HashMap<String, ArrayList<String>>();
         pendingDrivers = new ArrayList<Driver>();
@@ -27,7 +24,7 @@ public class system {
         return null;
     }
 
-    public system() {
+    public MemorySystem() {
         userDatabase = new HashMap<>();
         AreaToDriverMap = new HashMap<String, ArrayList<String>>();
         pendingDrivers = new ArrayList<Driver>();
@@ -153,6 +150,4 @@ public class system {
     public ArrayList<Driver> getPendingDrivers() {
         return pendingDrivers;
     }
-
-
 }

@@ -1,6 +1,6 @@
 package UI;
 
-import System.system;
+import System.*;
 import Users.*;
 import Rides.*;
 
@@ -15,7 +15,7 @@ public class Main {
     static User admin4 = new Admin(new Info("abdallah", "010000000", "0000000000", "00"));
 
     Map<String, User> database = new HashMap<String, User>();
-    static system system = new system();
+    static MainSystem system = new MemorySystem();
     static User currentUser = null;
     static Scanner input = new Scanner(System.in);
 

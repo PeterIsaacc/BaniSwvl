@@ -1,7 +1,6 @@
 package Users;
 
 import Rides.*;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -134,5 +133,36 @@ public class Driver extends User {
         string += ("\ndriver state: " + driverState);
         return string;
     }
+    //displayMenu functions
+    public static void driverAddingArea() {
+        System.out.println("----------" + "Add Area" + "----------");
+        System.out.println("Enter area name: ");
+        String area = input.nextLine();
+        area = area.toLowerCase();
+        boolean success = system.addAreaToDriver(area, (Driver) currentUser);
+        if (success) System.out.println("Area added successfully...");
+        else System.out.println("Area already exists...");
+    }
+
+    public static void driverListingRides() {
+        System.out.println("----------" + "Available Ride Requests" + "----------");
+        Driver driver = (Driver) currentUser;
+        boolean empty = driver.listRides();
+        if (empty) return;
+        System.out.print("Would you like to make an offer? (y/n)");
+        String choice = input.nextLine();
+        if (choice.equals("y")) {
+            System.out.println("Which ride do you want to make an offer to? (enter an index starting from 1)");
+            int index = input.nextInt();
+            index--;
+            System.out.println("Enter price: ");
+            double price = input.nextDouble();
+            input.nextLine();
+            boolean success = system.driverMakingOffer((Driver) currentUser, index, price);
+            if (success) System.out.println("Offer made successfully...");
+            else System.out.println("Invalid index");
+        }
+    }
+    //end of displayMenu functions
 
 }
