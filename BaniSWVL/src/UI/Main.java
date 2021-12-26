@@ -2,10 +2,6 @@ package UI;
 
 import System.*;
 import Users.*;
-import Rides.*;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -14,7 +10,7 @@ public class Main {
     static User admin3 = new Admin(new Info("david", "010000000", "0000000000", "00"));
     static User admin4 = new Admin(new Info("abdallah", "010000000", "0000000000", "00"));
 
-    Map<String, User> database = new HashMap<String, User>();
+
     static MainSystem system = new MemorySystem();
     static User currentUser = null;
     public static Scanner input = new Scanner(System.in);
@@ -66,9 +62,7 @@ public class Main {
                                 String nationalId = input.nextLine();
                                 currentUser = system.register(new DriverInfo(data, driverLicense, nationalId));
                             }
-                            case "2" -> {
-                                currentUser = system.register(data);
-                            }
+                            case "2" -> currentUser = system.register(data);
                             default -> throw new IllegalStateException("Unexpected value: " + choice);
                         }
                     }

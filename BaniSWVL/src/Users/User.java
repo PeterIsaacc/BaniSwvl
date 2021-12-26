@@ -8,11 +8,6 @@ public abstract class  User {
     public User(Info userData) {
         this.userData = userData;
     }
-
-    public User() {
-        this.userData = null;
-    }
-
     public abstract boolean setState(State state);
     public Info getUserData() {
         return userData;

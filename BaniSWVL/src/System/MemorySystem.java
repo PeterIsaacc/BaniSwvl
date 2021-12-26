@@ -13,8 +13,8 @@ public class MemorySystem implements MainSystem {
 
     public MemorySystem(Map<String, User> userDatabase) {
         this.userDatabase = userDatabase;
-        AreaToDriverMap = new HashMap<String, ArrayList<String>>();
-        pendingDrivers = new ArrayList<Driver>();
+        AreaToDriverMap = new HashMap<>();
+        pendingDrivers = new ArrayList<>();
     }
 
     public User getUser(String userName) {
@@ -26,8 +26,8 @@ public class MemorySystem implements MainSystem {
 
     public MemorySystem() {
         userDatabase = new HashMap<>();
-        AreaToDriverMap = new HashMap<String, ArrayList<String>>();
-        pendingDrivers = new ArrayList<Driver>();
+        AreaToDriverMap = new HashMap<>();
+        pendingDrivers = new ArrayList<>();
     }
 
     public User login(String username, String password) {
@@ -78,8 +78,7 @@ public class MemorySystem implements MainSystem {
         String area = rideRequest.getSource();
         if (AreaToDriverMap.containsKey(area)) {
             ArrayList<String> drivers = AreaToDriverMap.get(area);
-            for (int i = 0; i < drivers.size(); i++) {
-                String userName = drivers.get(i);
+            for (String userName : drivers) {
                 Driver driver = (Driver) userDatabase.get(userName);
                 driver.addRideRequest(rideRequest);
             }
@@ -88,11 +87,10 @@ public class MemorySystem implements MainSystem {
         return false;
     }
 
-    public boolean rateAdriver(UserRating userRating, String driverUserName) {
+    public boolean rateDriver(UserRating userRating, String driverUserName) {
         if (userDatabase.containsKey(driverUserName)) {
             User user = userDatabase.get(driverUserName);
-            if (user instanceof Driver) {
-                Driver driver = (Driver) user;
+            if (user instanceof Driver driver) {
                 driver.addRating(userRating);
                 return true;
             } else return false;
@@ -105,7 +103,7 @@ public class MemorySystem implements MainSystem {
         driver.addArea(area);
         String username = driver.getUserData().getUserName();
         if (!AreaToDriverMap.containsKey(area)) {
-            ArrayList<String> drivers = new ArrayList<String>();
+            ArrayList<String> drivers = new ArrayList<>();
             drivers.add(username);
             AreaToDriverMap.put(area, drivers);
         } else {
@@ -138,8 +136,7 @@ public class MemorySystem implements MainSystem {
             System.out.println("no pending drivers exist");
             return false;
         }
-        for (int i = 0; i < pendingDrivers.size(); i++)
-            System.out.println(pendingDrivers.get(i));
+        for (Driver pendingDriver : pendingDrivers) System.out.println(pendingDriver);
         System.out.println();
         return true;
     }

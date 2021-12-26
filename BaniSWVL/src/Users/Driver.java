@@ -1,22 +1,21 @@
 package Users;
 
-import Rides.*;
+import Rides.Offer;
+import Rides.RideRequest;
+import System.MainSystem;
+import UI.Main;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
-import System.*;
-import UI.Main;
-
 public class Driver extends User {
-    private Set<String> areas;
+    private final Set<String> areas;
     private boolean available;
     private double avgRating;
-    private ArrayList<UserRating> userRatings;
-    private ArrayList<RideRequest> rideRequests;
-    private ArrayList<Offer> offers;
+    private final ArrayList<UserRating> userRatings;
+    private final ArrayList<RideRequest> rideRequests;
+    private final ArrayList<Offer> offers;
     private State driverState;
 
     public boolean isAvailable() {
@@ -37,10 +36,10 @@ public class Driver extends User {
 
     public Driver(Info userData) {
         super(userData);
-        areas = new HashSet<String>();
-        rideRequests = new ArrayList<RideRequest>();
-        userRatings = new ArrayList<UserRating>();
-        offers = new ArrayList<Offer>();
+        areas = new HashSet<>();
+        rideRequests = new ArrayList<>();
+        userRatings = new ArrayList<>();
+        offers = new ArrayList<>();
         driverState = State.Pending;
         avgRating = 0;
     }
@@ -62,18 +61,10 @@ public class Driver extends User {
         int choice = Main.input.nextInt();
         Main.input.nextLine();
         switch (choice) {
-            case 1 -> {
-                driverAddingArea(system);
-            }
-            case 2 -> {
-                this.listUserRatings();
-            }
-            case 3 -> {
-                driverListingRides(system);
-            }
-            case 4 -> {
-                this.listOffers();
-            }
+            case 1 -> driverAddingArea(system);
+            case 2 -> this.listUserRatings();
+            case 3 -> driverListingRides(system);
+            case 4 -> this.listOffers();
             case 5 -> {
                 return null;
             }
@@ -92,8 +83,8 @@ public class Driver extends User {
             System.out.println();
             return;
         }
-        for (int i = 0; i < userRatings.size(); i++) {
-            System.out.println(userRatings.get(i));
+        for (UserRating userRating : userRatings) {
+            System.out.println(userRating);
             System.out.println();
         }
     }
@@ -104,8 +95,8 @@ public class Driver extends User {
             System.out.println();
             return true;
         }
-        for (int i = 0; i < rideRequests.size(); i++) {
-            System.out.println(rideRequests.get(i));
+        for (RideRequest rideRequest : rideRequests) {
+            System.out.println(rideRequest);
             System.out.println();
         }
         return false;
@@ -113,7 +104,7 @@ public class Driver extends User {
 
     public void addRating(UserRating rating) {
         for (int i = 0; i < userRatings.size(); i++) {
-            if (rating.getUserName() == userRatings.get(i).getUserName()) {
+            if (rating.getUserName().equals(userRatings.get(i).getUserName())) {
                 userRatings.set(i, rating);
                 calculateAvgRating();
                 return;
@@ -139,8 +130,8 @@ public class Driver extends User {
             System.out.println();
             return;
         }
-        for (int i = 0; i < offers.size(); i++) {
-            System.out.println(offers.get(i));
+        for (Offer offer : offers) {
+            System.out.println(offer);
             System.out.println();
         }
     }
@@ -159,8 +150,8 @@ public class Driver extends User {
 
     private void calculateAvgRating() {
         int sum = 0;
-        for (int i = 0; i < userRatings.size(); i++) {
-            sum += userRatings.get(i).getRating();
+        for (UserRating userRating : userRatings) {
+            sum += userRating.getRating();
         }
         avgRating = (double) sum / userRatings.size();
     }

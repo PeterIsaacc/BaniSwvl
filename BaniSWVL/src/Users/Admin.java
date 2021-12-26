@@ -13,7 +13,7 @@ public class Admin extends User {
         super(userData);
     }
 
-    public void verfiyDriverRegistration(String driverUserName, ArrayList<Driver> pendingDrivers) {
+    public void verifyDriverRegistration(String driverUserName, ArrayList<Driver> pendingDrivers) {
         for (int i = 0; i < pendingDrivers.size(); i++) {
             Driver driver = pendingDrivers.get(i);
             if (driver.getUserData().getUserName().equals(driverUserName)) {
@@ -74,7 +74,7 @@ public class Admin extends User {
             System.out.println("---------------------------------------------");
             System.out.println("Enter driver's username you want to accept: ");
             String userName = Main.input.nextLine();
-            this.verfiyDriverRegistration(userName, system.getPendingDrivers());
+            this.verifyDriverRegistration(userName, system.getPendingDrivers());
             System.out.println("Driver with username: " + userName + " accepted");
         }
     }

@@ -1,9 +1,9 @@
 package Rides;
 
 public class RideRequest {
-    private String source;
-    private String destination;
-    private String clientUserName;
+    private final String source;
+    private final String destination;
+    private final String clientUserName;
     public RideRequest(String src, String dest, String userName)
     {
         source = src;

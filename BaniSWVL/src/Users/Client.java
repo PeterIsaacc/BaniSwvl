@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Client extends User {
     private State state;
-    private ArrayList<Offer> offers;
-    private ArrayList<RideRequest> rideRequests;
+    private final ArrayList<Offer> offers;
+    private final ArrayList<RideRequest> rideRequests;
 
     public State getState() {
         return state;
@@ -23,8 +23,8 @@ public class Client extends User {
 
     public Client(Info userData) {
         super(userData);
-        rideRequests = new ArrayList<RideRequest>();
-        offers = new ArrayList<Offer>();
+        rideRequests = new ArrayList<>();
+        offers = new ArrayList<>();
         state = State.Accepted;
     }
 
@@ -43,15 +43,9 @@ public class Client extends User {
         int choice = Main.input.nextInt();
         Main.input.nextLine();
         switch (choice) {
-            case 1 -> {
-                requestRide(system);
-            }
-            case 2 -> {
-                rateDriver(system);
-            }
-            case 3 -> {
-                this.listOffers();
-            }
+            case 1 -> requestRide(system);
+            case 2 -> rateDriver(system);
+            case 3 -> this.listOffers();
             case 4 -> {
                 return null;
             }
@@ -85,7 +79,7 @@ public class Client extends User {
         String comment = Main.input.nextLine();
 
         UserRating userRating = this.rateDriver(rating, comment);
-        boolean success = system.rateAdriver(userRating, userName);
+        boolean success = system.rateDriver(userRating, userName);
         if (success) System.out.println("Rating submitted for" + userName);
         else System.out.println("no such driver exists");
     }
@@ -115,8 +109,8 @@ public class Client extends User {
             System.out.println("no rides exist yet");
             return;
         }
-        for (int i = 0; i < rideRequests.size(); i++) {
-            System.out.println(rideRequests.get(i));
+        for (RideRequest rideRequest : rideRequests) {
+            System.out.println(rideRequest);
         }
     }
 
@@ -125,8 +119,8 @@ public class Client extends User {
             System.out.println("no offers exist yet");
             return;
         }
-        for (int i = 0; i < offers.size(); i++) {
-            System.out.println(offers.get(i));
+        for (Offer offer : offers) {
+            System.out.println(offer);
         }
     }
 
