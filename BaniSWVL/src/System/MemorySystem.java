@@ -133,14 +133,15 @@ public class MemorySystem implements MainSystem {
         System.out.println();
     }
 
-    public void listPendingDrivers() {
+    public boolean listPendingDrivers() {
         if (pendingDrivers.size() == 0) {
             System.out.println("no pending drivers exist");
-            return;
+            return false;
         }
         for (int i = 0; i < pendingDrivers.size(); i++)
             System.out.println(pendingDrivers.get(i));
         System.out.println();
+        return true;
     }
 
     public void addUser(User user) {

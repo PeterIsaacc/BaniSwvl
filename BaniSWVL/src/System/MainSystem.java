@@ -24,7 +24,7 @@ public interface MainSystem {
 
     public void listAllUsers();
 
-    public void listPendingDrivers();
+    public boolean listPendingDrivers();
 
     public void addUser(User user);
 

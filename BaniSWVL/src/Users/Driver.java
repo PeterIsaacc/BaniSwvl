@@ -1,11 +1,14 @@
 package Users;
 
 import Rides.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+
 import System.*;
+import UI.Main;
 
 public class Driver extends User {
     private Set<String> areas;
@@ -43,7 +46,7 @@ public class Driver extends User {
     }
 
     public User displayMenu(MainSystem system) {
-        Scanner input = new Scanner(System.in);
+
         System.out.println("----------" + "Driver Menu" + "----------");
         System.out.println("""
                 1. Add an area
@@ -52,20 +55,24 @@ public class Driver extends User {
                 4. List offer you made
                 5. Logout
                 """);
-        int choice = input.nextInt();
-        input.nextLine();
+        return options(system);
+    }
+
+    public User options(MainSystem system) {
+        int choice = Main.input.nextInt();
+        Main.input.nextLine();
         switch (choice) {
             case 1 -> {
-                driverAddingArea();
+                driverAddingArea(system);
             }
             case 2 -> {
-                ((Driver) currentUser).listUserRatings();
+                this.listUserRatings();
             }
             case 3 -> {
-                driverListingRides();
+                driverListingRides(system);
             }
             case 4 -> {
-                ((Driver) currentUser).listOffers();
+                this.listOffers();
             }
             case 5 -> {
                 return null;
@@ -158,8 +165,9 @@ public class Driver extends User {
         avgRating = (double) sum / userRatings.size();
     }
 
-    public void setState(State state) {
+    public boolean setState(State state) {
         this.driverState = state;
+        return true;
     }
 
     public String toString() {
@@ -168,32 +176,32 @@ public class Driver extends User {
         string += ("\ndriver state: " + driverState);
         return string;
     }
+
     //displayMenu functions
-    public static void driverAddingArea() {
+    public void driverAddingArea(MainSystem system) {
         System.out.println("----------" + "Add Area" + "----------");
         System.out.println("Enter area name: ");
-        String area = input.nextLine();
+        String area = Main.input.nextLine();
         area = area.toLowerCase();
-        boolean success = system.addAreaToDriver(area, (Driver) currentUser);
+        boolean success = system.addAreaToDriver(area, this);
         if (success) System.out.println("Area added successfully...");
         else System.out.println("Area already exists...");
     }
 
-    public static void driverListingRides() {
+    public void driverListingRides(MainSystem system) {
         System.out.println("----------" + "Available Ride Requests" + "----------");
-        Driver driver = (Driver) currentUser;
-        boolean empty = driver.listRides();
+        boolean empty = this.listRides();
         if (empty) return;
         System.out.print("Would you like to make an offer? (y/n)");
-        String choice = input.nextLine();
+        String choice = Main.input.nextLine();
         if (choice.equals("y")) {
             System.out.println("Which ride do you want to make an offer to? (enter an index starting from 1)");
-            int index = input.nextInt();
+            int index = Main.input.nextInt();
             index--;
             System.out.println("Enter price: ");
-            double price = input.nextDouble();
-            input.nextLine();
-            boolean success = system.driverMakingOffer((Driver) currentUser, index, price);
+            double price = Main.input.nextDouble();
+            Main.input.nextLine();
+            boolean success = system.driverMakingOffer(this, index, price);
             if (success) System.out.println("Offer made successfully...");
             else System.out.println("Invalid index");
         }

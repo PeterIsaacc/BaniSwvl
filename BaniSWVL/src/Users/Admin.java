@@ -1,23 +1,22 @@
 package Users;
 
 import UI.Main;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
+
 import System.*;
 
-public class Admin extends User{
+public class Admin extends User {
     public Admin(Info userData) {
         super(userData);
     }
 
-    public void verfiyDriverRegistration(String driverUserName, ArrayList<Driver> pendingDrivers)
-    {
-        for(int i = 0; i < pendingDrivers.size(); i++)
-        {
+    public void verfiyDriverRegistration(String driverUserName, ArrayList<Driver> pendingDrivers) {
+        for (int i = 0; i < pendingDrivers.size(); i++) {
             Driver driver = pendingDrivers.get(i);
-            if(driver.getUserData().getUserName().equals(driverUserName))
-            {
+            if (driver.getUserData().getUserName().equals(driverUserName)) {
                 driver.setState(State.Accepted);
                 pendingDrivers.remove(i);
                 return;
@@ -25,16 +24,11 @@ public class Admin extends User{
         }
     }
 
-    public void suspendUser(User user)
-    {
-        if(user instanceof Client)
-        {
-            ((Client) user).setState(State.Suspended);
-        }
-        if(user instanceof Driver)
-        {
-            ((Driver) user).setState(State.Suspended);
-        }
+    public void suspendUser(User user) {
+        if (user.setState(State.Suspended)) {
+            System.out.println("User with username: " + user.getUserData().getUserName() + " has been suspended");
+        } else
+            System.out.println("Suspension failed");
     }
 
     public User displayMenu(MainSystem system) {
@@ -46,20 +40,24 @@ public class Admin extends User{
                 4. Suspend a user
                 5. Logout
                 """);
+        return options(system);
+    }
+
+    public User options(MainSystem system) {
         int choice = Main.input.nextInt();
-        input.nextLine();
+        Main.input.nextLine();
         switch (choice) {
             case 1 -> {
-                Main.system.listPendingDrivers();
+                system.listPendingDrivers();
             }
             case 2 -> {
-                Main.system.listAllUsers();
+                system.listAllUsers();
             }
             case 3 -> {
-                AdminAcceptingDriver();
+                AdminAcceptingDriver(system);
             }
             case 4 -> {
-                AdminSuspendingUser();
+                AdminSuspendingUser(system);
             }
             case 5 -> {
                 return null;
@@ -70,38 +68,38 @@ public class Admin extends User{
     }
 
     //displayMenu Functions
-    public static void AdminAcceptingDriver() {
+    public void AdminAcceptingDriver(MainSystem system) {
         System.out.println("----------" + "Accept A Driver" + "----------");
-        Admin admin = (Admin) currentUser;
-        system.listPendingDrivers();
-        System.out.println("---------------------------------------------");
-        System.out.println("Enter driver's username you want to accept: ");
-        String userName = input.nextLine();
-        admin.verfiyDriverRegistration(userName, system.getPendingDrivers());
-        System.out.println("Driver with username: " + userName + " accepted");
+        if (system.listPendingDrivers()) {
+            System.out.println("---------------------------------------------");
+            System.out.println("Enter driver's username you want to accept: ");
+            String userName = Main.input.nextLine();
+            this.verfiyDriverRegistration(userName, system.getPendingDrivers());
+            System.out.println("Driver with username: " + userName + " accepted");
+        }
     }
 
-    public static void AdminSuspendingUser() {
+    public boolean setState(State state) {
+        if (state == State.Suspended) {
+            System.out.println("You can't change state of an Admin!");
+            System.out.println();
+        }
+        return false;
+    }
+
+    public void AdminSuspendingUser(MainSystem system) {
         System.out.println("----------" + "Suspend A User" + "----------");
         system.listAllUsers();
         System.out.println("Enter username for user you want to suspend: ");
-        String userName = input.nextLine();
+        String userName = Main.input.nextLine();
         User user = system.getUser(userName);
-        if (user instanceof Admin) {
-            System.out.println("You can't suspend an admin!");
-            System.out.println();
-            return;
-        }
-        Admin admin = (Admin) currentUser;
-        admin.suspendUser(user);
-        System.out.println("User with username: " + userName + " has been suspended");
+        this.suspendUser(user);
     }
     //end of displayMenu functions
 
-    public String toString()
-    {
+    public String toString() {
         String string = "--Admin--\n";
-        string+=this.getUserData().toString();
+        string += this.getUserData().toString();
         return string;
     }
 }

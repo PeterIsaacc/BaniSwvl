@@ -13,11 +13,11 @@ public abstract class  User {
         this.userData = null;
     }
 
-
+    public abstract boolean setState(State state);
     public Info getUserData() {
         return userData;
     }
-
+    public abstract User options(MainSystem system);
     public abstract User displayMenu(MainSystem system);
     public abstract String toString();
     public void setUserData(Info userData) {

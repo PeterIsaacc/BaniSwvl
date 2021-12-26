@@ -2,8 +2,9 @@ package Users;
 
 import Rides.*;
 import System.*;
+import UI.Main;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class Client extends User {
@@ -15,8 +16,9 @@ public class Client extends User {
         return state;
     }
 
-    public void setState(State state) {
+    public boolean setState(State state) {
         this.state = state;
+        return true;
     }
 
     public Client(Info userData) {
@@ -34,56 +36,61 @@ public class Client extends User {
                 3. List offers
                 4. Logout
                 """);
-        int choice = input.nextInt();
-        input.nextLine();
+        return options(system);
+    }
+
+    public User options(MainSystem system) {
+        int choice = Main.input.nextInt();
+        Main.input.nextLine();
         switch (choice) {
             case 1 -> {
-                clientRequestingRide();
+                requestRide(system);
             }
             case 2 -> {
-                clientRatingDriver();
+                rateDriver(system);
             }
             case 3 -> {
-                ((Client) this).listOffers();
+                this.listOffers();
             }
-            case 4 ->{
+            case 4 -> {
                 return null;
             }
             default -> throw new IllegalStateException("Unexpected value: " + choice);
         }
         return this;
     }
-    //displayMenu functions
-    public void clientRequestingRide() {
+
+    //options functions
+    public void requestRide(MainSystem system) {
         System.out.println("----------" + "Request Ride" + "----------");
         System.out.println("Enter Source: ");
-        String source = input.nextLine();
+        String source = Main.input.nextLine();
         System.out.println("Enter Destination: ");
-        String destination = input.nextLine();
-        Client cl = (Client) this;
-        RideRequest rideRequest = cl.rideRequest(source, destination);
+        String destination = Main.input.nextLine();
+
+        RideRequest rideRequest = this.rideRequest(source, destination);
         boolean success = system.notifyDrivers(rideRequest);
         if (success) System.out.println("Relevant drivers have been notified...");
         else System.out.println("Area doesn't exist in our database!");
     }
 
-    public void clientRatingDriver() {
+    public void rateDriver(MainSystem system) {
         System.out.println("----------" + "Rate Driver" + "----------");
         System.out.println("Enter driver's username: ");
-        String userName = input.nextLine();
+        String userName = Main.input.nextLine();
         System.out.println("Enter rating from 1 to 5");
-        int rating = input.nextInt();
-        input.nextLine();
+        int rating = Main.input.nextInt();
+        Main.input.nextLine();
         System.out.println("Any Comments? ");
-        String comment = input.nextLine();
+        String comment = Main.input.nextLine();
 
-        Client cl = (Client) this;
-        UserRating userRating = cl.rateDriver(rating, comment);
+        UserRating userRating = this.rateDriver(rating, comment);
         boolean success = system.rateAdriver(userRating, userName);
         if (success) System.out.println("Rating submitted for" + userName);
         else System.out.println("no such driver exists");
     }
-    //end of displayMenu functions
+    //end of options functions
+
 
     public RideRequest rideRequest(String source, String destination) {
         RideRequest rideRequest = new RideRequest(source, destination, getUserData().getUserName());
