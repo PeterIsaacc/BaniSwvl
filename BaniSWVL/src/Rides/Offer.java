@@ -19,6 +19,11 @@ public class Offer {
     public double getPrice() {
         return price;
     }
+
+    public String getDriverUserName() {
+        return driverUserName;
+    }
+
     public String toString()
     {
         return (rideRequest + "\nPrice: " + price + "\ndriver username: " + driverUserName + "\ndriver rating: " + driverRating);

@@ -5,6 +5,7 @@ import System.*;
 import UI.Main;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Client extends User {
@@ -45,7 +46,7 @@ public class Client extends User {
         switch (choice) {
             case 1 -> requestRide(system);
             case 2 -> rateDriver(system);
-            case 3 -> this.listOffers();
+            case 3 -> this.listAndChooseOffer(system);
             case 4 -> {
                 return null;
             }
@@ -114,14 +115,20 @@ public class Client extends User {
         }
     }
 
-    public void listOffers() {
+    public void listAndChooseOffer(MainSystem system) {
         if (offers.size() == 0) {
-            System.out.println("no offers exist yet");
+            System.out.println("no offers yet...");
             return;
         }
+        System.out.println("------Choose An Offer------");
+        int i = 1;
         for (Offer offer : offers) {
-            System.out.println(offer);
+            System.out.println(i++ + " " + offer);
         }
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+        system.clientAcceptOffer(offers.get(choice - 1));
+        offers.remove(choice - 1);
     }
 
     public String toString() {

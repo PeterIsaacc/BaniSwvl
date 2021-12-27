@@ -2,7 +2,7 @@ package Users;
 
 import Rides.Offer;
 import Rides.RideRequest;
-import System.MainSystem;
+import System.*;
 import UI.Main;
 
 import java.util.ArrayList;
@@ -14,7 +14,6 @@ public class Driver extends User {
     private boolean available;
     private double avgRating;
     private final ArrayList<UserRating> userRatings;
-    private final ArrayList<RideRequest> rideRequests;
     private final ArrayList<Offer> offers;
     private State driverState;
 
@@ -37,7 +36,6 @@ public class Driver extends User {
     public Driver(Info userData) {
         super(userData);
         areas = new HashSet<>();
-        rideRequests = new ArrayList<>();
         userRatings = new ArrayList<>();
         offers = new ArrayList<>();
         driverState = State.Pending;
@@ -46,7 +44,7 @@ public class Driver extends User {
 
     public User displayMenu(MainSystem system) {
 
-        System.out.println("----------" + "Driver Menu" + "----------");
+        System.out.println("----------Driver Menu----------");
         System.out.println("""
                 1. Add an area
                 2. List user ratings
@@ -89,13 +87,13 @@ public class Driver extends User {
         }
     }
 
-    public boolean listRides() {
-        if (rideRequests.size() == 0) {
+    public boolean listRides(MainSystem system) {
+        if (system.getRideRequests().size() == 0) {
             System.out.println("no rides exist yet");
             System.out.println();
             return true;
         }
-        for (RideRequest rideRequest : rideRequests) {
+        for (RideRequest rideRequest : system.getRideRequests()) {
             System.out.println(rideRequest);
             System.out.println();
         }
@@ -114,8 +112,8 @@ public class Driver extends User {
         calculateAvgRating();
     }
 
-    public void addRideRequest(RideRequest rideRequest) {
-        rideRequests.add(rideRequest);
+    public void addRideRequest(RideRequest rideRequest, MainSystem system) {
+        system.getRideRequests().add(rideRequest);
     }
 
     public Offer makeOffer(RideRequest rideRequest, double price) {
@@ -140,8 +138,8 @@ public class Driver extends User {
         return areas.contains(area);
     }
 
-    public ArrayList<RideRequest> getRideRequests() {
-        return rideRequests;
+    public ArrayList<RideRequest> getRideRequests(MainSystem system) {
+        return system.getRideRequests();
     }
 
     public void addOffer(Offer offer) {
@@ -170,7 +168,7 @@ public class Driver extends User {
 
     //displayMenu functions
     public void driverAddingArea(MainSystem system) {
-        System.out.println("----------" + "Add Area" + "----------");
+        System.out.println("----------Add Area----------");
         System.out.println("Enter area name: ");
         String area = Main.input.nextLine();
         area = area.toLowerCase();
@@ -180,8 +178,8 @@ public class Driver extends User {
     }
 
     public void driverListingRides(MainSystem system) {
-        System.out.println("----------" + "Available Ride Requests" + "----------");
-        boolean empty = this.listRides();
+        System.out.println("----------Available Ride Requests----------");
+        boolean empty = this.listRides(system);
         if (empty) return;
         System.out.print("Would you like to make an offer? (y/n)");
         String choice = Main.input.nextLine();

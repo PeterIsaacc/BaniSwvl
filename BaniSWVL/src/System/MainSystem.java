@@ -1,11 +1,21 @@
 package System;
 
+import Log.Log;
+import Rides.Offer;
 import Rides.RideRequest;
 import Users.*;
 
 import java.util.ArrayList;
 
 public interface MainSystem {
+
+    public ArrayList<RideRequest> getRideRequests();
+
+    public void setRideRequests(ArrayList<RideRequest> rideRequests);
+
+    public Log getLogs();
+
+    public void setLogs(Log logs);
 
     User getUser(String userName);
 
@@ -14,6 +24,8 @@ public interface MainSystem {
     User register(Info data);
 
     void addAdmin(User user);
+
+    public boolean clientAcceptOffer(Offer offer);
 
     boolean notifyDrivers(RideRequest rideRequest);
 

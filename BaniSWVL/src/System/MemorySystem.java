@@ -2,6 +2,10 @@ package System;
 
 import Rides.*;
 import Users.*;
+import Log.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +14,24 @@ public class MemorySystem implements MainSystem {
     Map<String, User> userDatabase;
     Map<String, ArrayList<String>> AreaToDriverMap;
     ArrayList<Driver> pendingDrivers;
+    Log logs;
+    ArrayList<RideRequest> rideRequests;
+
+    public ArrayList<RideRequest> getRideRequests() {
+        return rideRequests;
+    }
+
+    public void setRideRequests(ArrayList<RideRequest> rideRequests) {
+        this.rideRequests = rideRequests;
+    }
+
+    public Log getLogs() {
+        return logs;
+    }
+
+    public void setLogs(Log logs) {
+        this.logs = logs;
+    }
 
     public MemorySystem(Map<String, User> userDatabase) {
         this.userDatabase = userDatabase;
@@ -80,7 +102,7 @@ public class MemorySystem implements MainSystem {
             ArrayList<String> drivers = AreaToDriverMap.get(area);
             for (String userName : drivers) {
                 Driver driver = (Driver) userDatabase.get(userName);
-                driver.addRideRequest(rideRequest);
+                driver.addRideRequest(rideRequest, this);
             }
             return true;
         }
@@ -113,13 +135,26 @@ public class MemorySystem implements MainSystem {
     }
 
     public boolean driverMakingOffer(Driver driver, int index, double price) {
-        ArrayList<RideRequest> rideRequests = driver.getRideRequests();
         if (index >= rideRequests.size()) return false;
         RideRequest rideRequest = rideRequests.get(index);
         Offer offer = driver.makeOffer(rideRequest, price);
         Client cl = (Client) userDatabase.get(rideRequest.getClientUserName());
         cl.addOffer(offer);
         rideRequests.remove(index);
+
+        Date date = new Date();
+        logs.addEvent(new RideSetPrice(date, offer));
+
+        return true;
+    }
+
+    public boolean clientAcceptOffer(Offer offer) {
+        int index = rideRequests.indexOf(offer.getRideRequest());
+        Date date = new Date();
+        logs.addEvent(new RideAcceptance(date, offer.getRideRequest()));
+        rideRequests.remove(index);
+        userDatabase.get(offer.getDriverUserName()).setState(State.Busy);
+
         return true;
     }
 
