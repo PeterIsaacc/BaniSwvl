@@ -21,6 +21,6 @@ public class RideSetPrice implements Event {
         return ("\nEvent Type: Captain set a price for ride\n"
                 + "Event Time: " + this.eventTime + "\n"
                 + "Captain's Name: " + this.driverUserName
-                + "Ride Price: " + this.price);
+                + "\nRide Price: " + this.price);
     }
 }

@@ -26,7 +26,7 @@ public class Client extends User {
         super(userData);
         rideRequests = new ArrayList<>();
         offers = new ArrayList<>();
-        state = State.Accepted;
+        state = State.Avilable;
     }
 
     public User displayMenu(MainSystem system) {
@@ -123,7 +123,7 @@ public class Client extends User {
         System.out.println("------Choose An Offer------");
         int i = 1;
         for (Offer offer : offers) {
-            System.out.println(i++ + " " + offer);
+            System.out.println(i++ + ": " + offer);
         }
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();

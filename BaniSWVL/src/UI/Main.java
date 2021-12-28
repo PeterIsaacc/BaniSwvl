@@ -2,13 +2,16 @@ package UI;
 
 import System.*;
 import Users.*;
+
 import java.util.Scanner;
 
 public class Main {
     static User admin1 = new Admin(new Info("shehab", "010000000", "0000000000", "00"));
     static User admin2 = new Admin(new Info("peter", "010000000", "0000000000", "00"));
     static User admin3 = new Admin(new Info("david", "010000000", "0000000000", "00"));
-    static User admin4 = new Admin(new Info("abdallah", "010000000", "0000000000", "00"));
+    static User admin4 = new Admin(new Info("a", "010000000", "0000000000", "0"));
+    static User testclient = new Client(new Info("c", "010000000", "0000000000", "0"));
+    static User testdriver = new Driver(new Info("d", "010000000", "0000000000", "0"));
 
 
     static MainSystem system = new MemorySystem();
@@ -20,7 +23,9 @@ public class Main {
         system.addAdmin(admin2);
         system.addAdmin(admin3);
         system.addAdmin(admin4);
-
+        testdriver.setState(State.Avilable);
+        system.addUser(testdriver);
+        system.addUser(testclient);
         while (true) {
             while (currentUser == null) {
                 System.out.println("--------------------" + "BaniSWVL" + "--------------------");
@@ -63,10 +68,8 @@ public class Main {
                                 currentUser = system.register(new DriverInfo(data, driverLicense, nationalId));
                             }
                             case "2" -> currentUser = system.register(data);
-                            default -> throw new IllegalStateException("Unexpected value: " + choice);
                         }
                     }
-                    default -> throw new IllegalStateException("Unexpected value: " + input.nextInt());
                 }
             }
 

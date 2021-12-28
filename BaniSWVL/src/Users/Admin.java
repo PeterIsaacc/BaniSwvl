@@ -1,5 +1,6 @@
 package Users;
 
+import Rides.Offer;
 import UI.Main;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Admin extends User {
         for (int i = 0; i < pendingDrivers.size(); i++) {
             Driver driver = pendingDrivers.get(i);
             if (driver.getUserData().getUserName().equals(driverUserName)) {
-                driver.setState(State.Accepted);
+                driver.setState(State.Avilable);
                 pendingDrivers.remove(i);
                 return;
             }
@@ -38,7 +39,8 @@ public class Admin extends User {
                 2. List all users
                 3. Accept a driver request
                 4. Suspend a user
-                5. Logout
+                5. Show Logs
+                6. Logout
                 """);
         return options(system);
     }
@@ -67,6 +69,10 @@ public class Admin extends User {
         return this;
     }
 
+    private void listlogs(MainSystem system) {
+        system.getLogs().printLogs();
+    }
+
     //displayMenu Functions
     public void AdminAcceptingDriver(MainSystem system) {
         System.out.println("----------" + "Accept A Driver" + "----------");
@@ -86,6 +92,7 @@ public class Admin extends User {
         }
         return false;
     }
+
 
     public void AdminSuspendingUser(MainSystem system) {
         System.out.println("----------" + "Suspend A User" + "----------");

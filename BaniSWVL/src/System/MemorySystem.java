@@ -4,7 +4,6 @@ import Rides.*;
 import Users.*;
 import Log.*;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,12 +32,6 @@ public class MemorySystem implements MainSystem {
         this.logs = logs;
     }
 
-    public MemorySystem(Map<String, User> userDatabase) {
-        this.userDatabase = userDatabase;
-        AreaToDriverMap = new HashMap<>();
-        pendingDrivers = new ArrayList<>();
-    }
-
     public User getUser(String userName) {
         if (userDatabase.containsKey(userName)) {
             return userDatabase.get(userName);
@@ -47,9 +40,11 @@ public class MemorySystem implements MainSystem {
     }
 
     public MemorySystem() {
-        userDatabase = new HashMap<>();
+        this.userDatabase = new HashMap<>();
         AreaToDriverMap = new HashMap<>();
-        pendingDrivers = new ArrayList<>();
+        this.pendingDrivers = new ArrayList<>();
+        logs = new MemoryLog();
+        this.rideRequests = new ArrayList<>();
     }
 
     public User login(String username, String password) {
@@ -58,9 +53,9 @@ public class MemorySystem implements MainSystem {
             if (user instanceof Admin)
                 return user;
             if (user instanceof Driver) {
-                if (((Driver) user).getDriverState() == State.Suspended) {
+                if (((Driver) user).getState() == State.Suspended) {
                     System.out.println("This account is suspended");
-                } else if (((Driver) user).getDriverState() == State.Pending) {
+                } else if (((Driver) user).getState() == State.Pending) {
                     System.out.println("This account is pending");
                 } else return user;
             } else if (user instanceof Client) {
@@ -96,6 +91,7 @@ public class MemorySystem implements MainSystem {
             System.out.println("This is not an admin");
     }
 
+    // TODO notify the right drivers by area and source (ride request in memory system)
     public boolean notifyDrivers(RideRequest rideRequest) {
         String area = rideRequest.getSource();
         if (AreaToDriverMap.containsKey(area)) {
@@ -148,12 +144,18 @@ public class MemorySystem implements MainSystem {
         return true;
     }
 
+    // TODO find an alternative for finding the right ride-request object
     public boolean clientAcceptOffer(Offer offer) {
         int index = rideRequests.indexOf(offer.getRideRequest());
+        Driver driver = (Driver) userDatabase.get(offer.getDriverUserName());
+
         Date date = new Date();
         logs.addEvent(new RideAcceptance(date, offer.getRideRequest()));
+
         rideRequests.remove(index);
-        userDatabase.get(offer.getDriverUserName()).setState(State.Busy);
+
+        driver.setState(State.Busy);
+        driver.setCurrentOffer(driver.getOffers().indexOf(offer));
 
         return true;
     }

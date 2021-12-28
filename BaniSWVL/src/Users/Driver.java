@@ -1,11 +1,15 @@
 package Users;
 
+import Log.DestinationArrival;
+import Log.PickupArrival;
+import Log.RideSetPrice;
 import Rides.Offer;
 import Rides.RideRequest;
 import System.*;
 import UI.Main;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +19,8 @@ public class Driver extends User {
     private double avgRating;
     private final ArrayList<UserRating> userRatings;
     private final ArrayList<Offer> offers;
-    private State driverState;
+    private int currentOffer;
+    private State state;
 
     public boolean isAvailable() {
         return available;
@@ -25,12 +30,8 @@ public class Driver extends User {
         this.available = available;
     }
 
-    public State getDriverState() {
-        return driverState;
-    }
-
-    public void setDriverState(State driverState) {
-        this.driverState = driverState;
+    public State getState() {
+        return state;
     }
 
     public Driver(Info userData) {
@@ -38,21 +39,62 @@ public class Driver extends User {
         areas = new HashSet<>();
         userRatings = new ArrayList<>();
         offers = new ArrayList<>();
-        driverState = State.Pending;
+        state = State.Pending;
         avgRating = 0;
+        currentOffer = -1;
     }
 
     public User displayMenu(MainSystem system) {
 
         System.out.println("----------Driver Menu----------");
-        System.out.println("""
-                1. Add an area
-                2. List user ratings
-                3. List rides or make an offer
-                4. List offer you made
-                5. Logout
-                """);
-        return options(system);
+        if (this.state == State.Avilable) {
+            System.out.println("""
+                    1. Add an area
+                    2. List user ratings
+                    3. List rides or make an offer
+                    4. List offer you made
+                    5. Logout
+                    """);
+            return options(system);
+        } else if (this.state == State.Busy) {
+            System.out.println(offers.get(currentOffer));
+            System.out.println("""
+                    1. Notify Driver of Arrival to pickup point
+                    2. End Ride
+                    3. Logout
+                    """);
+            return busyOptions(system);
+        }
+        return null;
+    }
+
+
+    public User busyOptions(MainSystem system) {
+        int choice = Main.input.nextInt();
+        Main.input.nextLine();
+        switch (choice) {
+            case 1 -> arrivalAtLocation(system);
+            case 2 -> endRide(system);
+            case 3 -> {
+                return null;
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + choice);
+        }
+        return this;
+    }
+
+    private void endRide(MainSystem system) {
+        Date date = new Date();
+        system.getLogs().addEvent(new DestinationArrival(date, offers.get(currentOffer)));
+        state = State.Avilable;
+        offers.remove(currentOffer);
+
+    }
+
+    private void arrivalAtLocation(MainSystem system) {
+        Date date = new Date();
+        system.getLogs().addEvent(new PickupArrival(date, offers.get(currentOffer)));
+
     }
 
     public User options(MainSystem system) {
@@ -155,14 +197,14 @@ public class Driver extends User {
     }
 
     public boolean setState(State state) {
-        this.driverState = state;
+        this.state = state;
         return true;
     }
 
     public String toString() {
         String string = "--Driver--\n";
         string += getUserData().toString();
-        string += ("\ndriver state: " + driverState);
+        string += ("\ndriver state: " + state);
         return string;
     }
 
@@ -197,4 +239,16 @@ public class Driver extends User {
     }
     //end of displayMenu functions
 
+
+    public ArrayList<Offer> getOffers() {
+        return offers;
+    }
+
+    public int getCurrentOffer() {
+        return currentOffer;
+    }
+
+    public void setCurrentOffer(int currentOffer) {
+        this.currentOffer = currentOffer;
+    }
 }

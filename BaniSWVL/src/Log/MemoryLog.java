@@ -1,15 +1,21 @@
 package Log;
 
+import Rides.Offer;
+
 import java.util.ArrayList;
 
 public class MemoryLog implements Log {
-    ArrayList<Event> events;
-
+    ArrayList<Event> events = new ArrayList<>();
 
     @Override
     public void printLogs() {
+        if (events.size() == 0) {
+            System.out.println("no logs exist yet");
+            System.out.println();
+            return;
+        }
         for (Event e : events) {
-            System.out.println(e.toString());
+            System.out.println(e.toString() + '\n');
         }
     }
 

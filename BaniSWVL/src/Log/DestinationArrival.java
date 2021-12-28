@@ -5,7 +5,7 @@ import Rides.Offer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class DestinationArrival implements Event {
+public class DestinationArrival implements Event {
     Date eventTime;
     private final String clientUserName;
     private String driverUserName;
@@ -22,6 +22,6 @@ class DestinationArrival implements Event {
         return ("Event Type: Captain arrived to user location\n"
                 + "Event Time: " + this.eventTime + "\n"
                 + "Captain's Name: " + this.driverUserName
-                + "User's Name: " + this.clientUserName);
+                + "\nUser's Name: " + this.clientUserName);
     }
 }

@@ -20,6 +20,6 @@ public class PickupArrival implements Event {
         return ("Event Type: Captain arrived to user location\n"
                 + "Event Time: " + this.eventTime + "\n"
                 + "Captain's Name: " + this.driverUserName
-                + "User's Name: " + this.clientUserName);
+                + "\nUser's Name: " + this.clientUserName);
     }
 }
