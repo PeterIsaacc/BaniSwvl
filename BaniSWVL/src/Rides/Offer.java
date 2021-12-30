@@ -12,6 +12,14 @@ public class Offer {
         this.driverRating = driverRating;
     }
 
+    public double getDriverRating() {
+        return driverRating;
+    }
+
+    public void setDriverRating(double driverRating) {
+        this.driverRating = driverRating;
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }

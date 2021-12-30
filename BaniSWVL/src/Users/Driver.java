@@ -4,7 +4,7 @@ import Log.DestinationArrival;
 import Log.PickupArrival;
 import Rides.Offer;
 import Rides.RideRequest;
-import System.*;
+import System.MainSystem;
 import UI.Main;
 
 import java.util.ArrayList;
@@ -14,20 +14,13 @@ import java.util.Set;
 
 public class Driver extends User {
     private final Set<String> areas;
-    private boolean available;
     private double avgRating;
     private final ArrayList<UserRating> userRatings;
     private final ArrayList<Offer> offers;
     private int currentOffer;
     private State state;
+    private ArrayList<RideRequest> rideRequests;
 
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
 
     public State getState() {
         return state;
@@ -134,7 +127,12 @@ public class Driver extends User {
             System.out.println();
             return true;
         }
+        rideRequests = new ArrayList<>();
         for (RideRequest rideRequest : system.getRideRequests()) {
+            if (system.checkdriver(this, rideRequest.getSource()))
+                rideRequests.add(rideRequest);
+        }
+        for (RideRequest rideRequest : rideRequests) {
             System.out.println(rideRequest);
             System.out.println();
         }

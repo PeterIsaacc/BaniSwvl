@@ -3,13 +3,18 @@ package System;
 import Log.Log;
 import Rides.Offer;
 import Rides.RideRequest;
-import Users.*;
+import Users.Driver;
+import Users.Info;
+import Users.User;
+import Users.UserRating;
 
 import java.util.ArrayList;
 
 public interface MainSystem {
 
     public ArrayList<RideRequest> getRideRequests();
+
+    public boolean checkdriver(Driver d, String Area);
 
     public void setRideRequests(ArrayList<RideRequest> rideRequests);
 

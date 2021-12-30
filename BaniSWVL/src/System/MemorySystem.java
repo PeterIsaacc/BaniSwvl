@@ -1,11 +1,15 @@
 package System;
 
-import Rides.*;
+import Log.Log;
+import Log.MemoryLog;
+import Log.RideAcceptance;
+import Log.RideSetPrice;
+import Rides.Offer;
+import Rides.RideRequest;
 import Users.*;
-import Log.*;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +19,10 @@ public class MemorySystem implements MainSystem {
     ArrayList<Driver> pendingDrivers;
     Log logs;
     ArrayList<RideRequest> rideRequests;
+
+    public boolean checkdriver(Driver d, String Area) {
+        return AreaToDriverMap.get(Area).contains(d);
+    }
 
     public ArrayList<RideRequest> getRideRequests() {
         return rideRequests;
@@ -91,15 +99,9 @@ public class MemorySystem implements MainSystem {
             System.out.println("This is not an admin");
     }
 
-    // TODO notify the right drivers by area and source (ride request in memory system)
     public boolean notifyDrivers(RideRequest rideRequest) {
         String area = rideRequest.getSource();
         if (AreaToDriverMap.containsKey(area)) {
-            ArrayList<String> drivers = AreaToDriverMap.get(area);
-            for (String userName : drivers) {
-                Driver driver = (Driver) userDatabase.get(userName);
-                driver.addRideRequest(rideRequest, this);
-            }
             return true;
         }
         return false;
