@@ -12,6 +12,10 @@ public class Offer {
         this.driverRating = driverRating;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public RideRequest getRideRequest() {
         return rideRequest;
     }

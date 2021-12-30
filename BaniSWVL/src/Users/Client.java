@@ -26,7 +26,7 @@ public class Client extends User {
         super(userData);
         rideRequests = new ArrayList<>();
         offers = new ArrayList<>();
-        state = State.Avilable;
+        state = State.Available;
     }
 
     public User displayMenu(MainSystem system) {
@@ -63,7 +63,11 @@ public class Client extends User {
         System.out.println("Enter Destination: ");
         String destination = Main.input.nextLine();
 
-        RideRequest rideRequest = this.rideRequest(source, destination);
+        System.out.println("Is it okay for other users to join in? (if yes: enter desired number, if not: enter 0) ");
+        String numberOfPassengersString = Main.input.nextLine();
+        int numberOfPassengers = Integer.parseInt(numberOfPassengersString);
+
+        RideRequest rideRequest = this.rideRequest(source, destination, numberOfPassengers);
         boolean success = system.notifyDrivers(rideRequest);
         if (success) System.out.println("Relevant drivers have been notified...");
         else System.out.println("Area doesn't exist in our database!");
@@ -87,8 +91,8 @@ public class Client extends User {
     //end of options functions
 
 
-    public RideRequest rideRequest(String source, String destination) {
-        RideRequest rideRequest = new RideRequest(source, destination, getUserData().getUserName());
+    public RideRequest rideRequest(String source, String destination, int numberOfPassengers) {
+        RideRequest rideRequest = new RideRequest(source, destination, getUserData().getUserName(), numberOfPassengers);
         rideRequests.add(rideRequest);
         return rideRequest;
     }

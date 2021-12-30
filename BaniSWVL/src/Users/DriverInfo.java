@@ -11,7 +11,7 @@ public class DriverInfo extends Info {
 
     public String toString()
     {
-        return String.format("user name: " + getUserName() + "\nmobile number: " + getMobileNumber() + "\nEmail: "
+        return String.format("user name: " + getUserName() + "\nmobile number: " + getMobileNumber() + "\nDate of Birth: " + getDob() + "\nEmail: "
                 + getEmail() + "\nnational Id: " + nationalId + "\ndriver license: " + driverLicense);
     }
 }
