@@ -1,26 +1,41 @@
 package Users;
 
+import java.util.Date;
+
 public class Info {
     private String userName;
     private String mobileNumber;
+    private String dob;
     private String email;
     private String password;
 
-    public Info(String userName, String mobileNumber, String email, String password) {
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public Info(String userName, String mobileNumber, String email, String password, String dob) {
         this.userName = userName;
         this.mobileNumber = mobileNumber;
         this.email = email;
         this.password = password;
+        this.dob = dob;
     }
     public Info(Info data) {
         this.userName = data.userName;
         this.mobileNumber = data.mobileNumber;
         this.email = data.email;
         this.password = data.password;
+        this.dob = data.dob;
     }
+
+
     public String toString()
     {
-        return ("user name: " + userName + "\nmobile number: " + mobileNumber + "\nEmail: " + email);
+        return ("user name: " + userName + "\nmobile number: " + mobileNumber + "\nDate of Birth: " + dob +"\nEmail: " + email);
     }
     public String getUserName() {
         return userName;

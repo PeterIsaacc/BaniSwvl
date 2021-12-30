@@ -2,7 +2,6 @@ package Users;
 
 import Log.DestinationArrival;
 import Log.PickupArrival;
-import Log.RideSetPrice;
 import Rides.Offer;
 import Rides.RideRequest;
 import System.*;
@@ -47,7 +46,7 @@ public class Driver extends User {
     public User displayMenu(MainSystem system) {
 
         System.out.println("----------Driver Menu----------");
-        if (this.state == State.Avilable) {
+        if (this.state == State.Available) {
             System.out.println("""
                     1. Add an area
                     2. List user ratings
@@ -86,7 +85,7 @@ public class Driver extends User {
     private void endRide(MainSystem system) {
         Date date = new Date();
         system.getLogs().addEvent(new DestinationArrival(date, offers.get(currentOffer)));
-        state = State.Avilable;
+        state = State.Available;
         offers.remove(currentOffer);
 
     }

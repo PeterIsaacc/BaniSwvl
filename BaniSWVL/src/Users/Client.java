@@ -26,7 +26,7 @@ public class Client extends User {
         super(userData);
         rideRequests = new ArrayList<>();
         offers = new ArrayList<>();
-        state = State.Avilable;
+        state = State.Available;
     }
 
     public User displayMenu(MainSystem system) {

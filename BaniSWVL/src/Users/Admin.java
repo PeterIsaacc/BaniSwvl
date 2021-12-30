@@ -1,11 +1,8 @@
 package Users;
 
-import Rides.Offer;
 import UI.Main;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
 
 import System.*;
 
@@ -18,7 +15,7 @@ public class Admin extends User {
         for (int i = 0; i < pendingDrivers.size(); i++) {
             Driver driver = pendingDrivers.get(i);
             if (driver.getUserData().getUserName().equals(driverUserName)) {
-                driver.setState(State.Avilable);
+                driver.setState(State.Available);
                 pendingDrivers.remove(i);
                 return;
             }

@@ -1,5 +1,5 @@
 package Users;
 
 public enum State {
-    Pending, Avilable, Suspended, Busy
+    Pending, Available, Suspended, Busy
 }
