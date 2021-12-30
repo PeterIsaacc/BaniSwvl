@@ -4,11 +4,21 @@ public class RideRequest {
     private final String source;
     private final String destination;
     private final String clientUserName;
-    public RideRequest(String src, String dest, String userName)
+    private int numberOfPassengers;
+    public RideRequest(String src, String dest, String userName, int numberOfPassengers)
     {
         source = src;
         destination = dest;
         clientUserName = userName;
+        this.numberOfPassengers = numberOfPassengers;
+    }
+
+    public int getNumberOfPassengers() {
+        return numberOfPassengers;
+    }
+
+    public void setNumberOfPassengers(int numberOfPassengers) {
+        this.numberOfPassengers = numberOfPassengers;
     }
 
     public String getSource() {
