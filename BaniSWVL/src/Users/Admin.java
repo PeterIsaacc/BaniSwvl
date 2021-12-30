@@ -4,8 +4,6 @@ import Rides.Offer;
 import UI.Main;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
 
 import System.*;
 
@@ -49,19 +47,12 @@ public class Admin extends User {
         int choice = Main.input.nextInt();
         Main.input.nextLine();
         switch (choice) {
-            case 1 -> {
-                system.listPendingDrivers();
-            }
-            case 2 -> {
-                system.listAllUsers();
-            }
-            case 3 -> {
-                AdminAcceptingDriver(system);
-            }
-            case 4 -> {
-                AdminSuspendingUser(system);
-            }
-            case 5 -> {
+            case 1 -> system.listPendingDrivers();
+            case 2 -> system.listAllUsers();
+            case 3 -> AdminAcceptingDriver(system);
+            case 4 -> AdminSuspendingUser(system);
+            case 5 -> listlogs(system);
+            case 6 -> {
                 return null;
             }
 

@@ -127,6 +127,7 @@ public class Client extends User {
         }
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();
+        System.out.println("Which offer do you want to Accept? (enter an index starting from 1");
         system.clientAcceptOffer(offers.get(choice - 1));
         offers.remove(choice - 1);
     }

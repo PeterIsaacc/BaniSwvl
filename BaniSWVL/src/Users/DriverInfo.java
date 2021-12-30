@@ -1,8 +1,8 @@
 package Users;
 
 public class DriverInfo extends Info {
-    private String driverLicense;
-    private String nationalId;
+    private final String driverLicense;
+    private final String nationalId;
     public DriverInfo(Info data, String driverLicense, String nationalId) {
         super(data);
         this.driverLicense = driverLicense;
