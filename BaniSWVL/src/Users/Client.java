@@ -1,7 +1,8 @@
 package Users;
 
-import Rides.*;
-import System.*;
+import Rides.Offer;
+import Rides.RideRequest;
+import System.MainSystem;
 import UI.Main;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class Client extends User {
     private State state;
     private final ArrayList<Offer> offers;
     private final ArrayList<RideRequest> rideRequests;
+    private int numberofrides;
 
     public State getState() {
         return state;
@@ -27,6 +29,23 @@ public class Client extends User {
         rideRequests = new ArrayList<>();
         offers = new ArrayList<>();
         state = State.Available;
+        numberofrides = 0;
+    }
+
+    public ArrayList<Offer> getOffers() {
+        return offers;
+    }
+
+    public ArrayList<RideRequest> getRideRequests() {
+        return rideRequests;
+    }
+
+    public int getNumberofrides() {
+        return numberofrides;
+    }
+
+    public void setNumberofrides(int numberofrides) {
+        this.numberofrides = numberofrides;
     }
 
     public User displayMenu(MainSystem system) {
@@ -58,23 +77,25 @@ public class Client extends User {
     //options functions
     public void requestRide(MainSystem system) {
         System.out.println("----------" + "Request Ride" + "----------");
-        System.out.println("Enter Source: ");
+        System.out.print("Enter Source: ");
         String source = Main.input.nextLine();
-        System.out.println("Enter Destination: ");
+        System.out.print("Enter Destination: ");
         String destination = Main.input.nextLine();
 
-        System.out.println("Is it okay for other users to join in? (if yes: enter desired number, if not: enter 0) ");
+        System.out.print("Number of Passengers: ");
         String numberOfPassengersString = Main.input.nextLine();
         int numberOfPassengers = Integer.parseInt(numberOfPassengersString);
 
-        RideRequest rideRequest = this.rideRequest(source, destination, numberOfPassengers);
-        boolean success = system.notifyDrivers(rideRequest);
+        RideRequest rideRequest = requestaRide(source, destination, numberOfPassengers);
+
+        boolean success = system.updateSystemRideRequests(rideRequest);
+
         if (success) System.out.println("Relevant drivers have been notified...");
         else System.out.println("Area doesn't exist in our database!");
     }
 
     public void rateDriver(MainSystem system) {
-        System.out.println("----------" + "Rate Driver" + "----------");
+        System.out.println("----------Rate Driver----------");
         System.out.println("Enter driver's username: ");
         String userName = Main.input.nextLine();
         System.out.println("Enter rating from 1 to 5");
@@ -91,7 +112,7 @@ public class Client extends User {
     //end of options functions
 
 
-    public RideRequest rideRequest(String source, String destination, int numberOfPassengers) {
+    public RideRequest requestaRide(String source, String destination, int numberOfPassengers) {
         RideRequest rideRequest = new RideRequest(source, destination, getUserData().getUserName(), numberOfPassengers);
         rideRequests.add(rideRequest);
         return rideRequest;
@@ -127,14 +148,17 @@ public class Client extends User {
         System.out.println("------Choose An Offer------");
         int i = 1;
         for (Offer offer : offers) {
-            System.out.println(i++ + ": " + offer);
+            System.out.println("\t" + "Offer " + i++ + "\n" + offer);
         }
         Scanner input = new Scanner(System.in);
+        System.out.println("Which offer do you want to Accept? (enter an index starting from 1)");
         int choice = input.nextInt();
-        System.out.println("Which offer do you want to Accept? (enter an index starting from 1");
-        system.clientAcceptOffer(offers.get(choice - 1));
+        system.clientAcceptOffer(offers.get(choice - 1), this);
+
+        numberofrides++;
         offers.remove(choice - 1);
     }
+
 
     public String toString() {
         String string = "--Client--\n";

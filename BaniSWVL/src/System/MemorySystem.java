@@ -1,5 +1,9 @@
 package System;
 
+import Discounts.BirthdayDiscount;
+import Discounts.FirstRideDiscount;
+import Discounts.PublicHolidayDiscount;
+import Discounts.TwoPassengerDiscount;
 import Log.Log;
 import Log.MemoryLog;
 import Log.RideAcceptance;
@@ -19,9 +23,29 @@ public class MemorySystem implements MainSystem {
     ArrayList<Driver> pendingDrivers;
     Log logs;
     ArrayList<RideRequest> rideRequests;
+    ArrayList<String> AreaDiscounts;
+    public static ArrayList<Date> Holidays;
+
+
+    public boolean checkAreaDiscounts(String area) {
+        if (AreaDiscounts != null)
+            return AreaDiscounts.contains(area);
+        return false;
+    }
+
+    public boolean addAreaDiscounts(String area) {
+        if (AreaDiscounts == null)
+            AreaDiscounts = new ArrayList<>();
+        if (AreaDiscounts.contains(area))
+            return false;
+        AreaDiscounts.add(area);
+        return true;
+    }
 
     public boolean checkdriver(Driver d, String Area) {
-        return AreaToDriverMap.get(Area).contains(d);
+        if (AreaToDriverMap.containsKey(Area))
+            return AreaToDriverMap.get(Area).contains(d.getUserData().getUserName());
+        return false;
     }
 
     public ArrayList<RideRequest> getRideRequests() {
@@ -53,6 +77,8 @@ public class MemorySystem implements MainSystem {
         this.pendingDrivers = new ArrayList<>();
         logs = new MemoryLog();
         this.rideRequests = new ArrayList<>();
+        Holidays = new ArrayList<>();
+        Holidays.add(new Date());
     }
 
     public User login(String username, String password) {
@@ -99,8 +125,10 @@ public class MemorySystem implements MainSystem {
             System.out.println("This is not an admin");
     }
 
-    public boolean notifyDrivers(RideRequest rideRequest) {
+    public boolean updateSystemRideRequests(RideRequest rideRequest) {
         String area = rideRequest.getSource();
+        rideRequests.add(rideRequest);
+        System.out.println("database updated");
         if (AreaToDriverMap.containsKey(area)) {
             return true;
         }
@@ -132,13 +160,10 @@ public class MemorySystem implements MainSystem {
         return true;
     }
 
-    public boolean driverMakingOffer(Driver driver, int index, double price) {
-        if (index >= rideRequests.size()) return false;
-        RideRequest rideRequest = rideRequests.get(index);
+    public boolean driverMakingOffer(Driver driver, RideRequest rideRequest, double price) {
         Offer offer = driver.makeOffer(rideRequest, price);
         Client cl = (Client) userDatabase.get(rideRequest.getClientUserName());
         cl.addOffer(offer);
-        rideRequests.remove(index);
 
         Date date = new Date();
         logs.addEvent(new RideSetPrice(date, offer));
@@ -146,18 +171,38 @@ public class MemorySystem implements MainSystem {
         return true;
     }
 
-    // TODO find an alternative for finding the right ride-request object
-    public boolean clientAcceptOffer(Offer offer) {
-        int index = rideRequests.indexOf(offer.getRideRequest());
+    public boolean clientAcceptOffer(Offer offer, Client client) {
+
+        rideRequests.remove(offer.getRideRequest());
         Driver driver = (Driver) userDatabase.get(offer.getDriverUserName());
 
         Date date = new Date();
         logs.addEvent(new RideAcceptance(date, offer.getRideRequest()));
 
-        rideRequests.remove(index);
+        //number of passengers discount
+        if (offer.getOffer().getRideRequest().getNumberOfPassengers() >= 2) {
+            offer = new TwoPassengerDiscount(offer);
+        }
+
+        // first ride discount
+        if (client.getNumberofrides() == 0)
+            offer = new FirstRideDiscount(offer);
+
+        // Birthday discount
+        Date now = new Date();
+        if (client.getUserData().getDob().getDay() == now.getDay() && client.getUserData().getDob().getMonth() == now.getMonth()) {
+            offer = new BirthdayDiscount(offer);
+        }
+
+        //public holiday discount
+        for (Date holi : Holidays) {
+            if (holi.getDay() == now.getDay() && holi.getMonth() == now.getMonth()) {
+                offer = new PublicHolidayDiscount(offer);
+            }
+        }
 
         driver.setState(State.Busy);
-        driver.setCurrentOffer(driver.getOffers().indexOf(offer));
+        driver.setCurrentOffer(offer);
 
         return true;
     }

@@ -1,10 +1,9 @@
 package Users;
 
+import System.MainSystem;
 import UI.Main;
 
 import java.util.ArrayList;
-
-import System.*;
 
 public class Admin extends User {
     public Admin(Info userData) {
@@ -36,8 +35,9 @@ public class Admin extends User {
                 2. List all users
                 3. Accept a driver request
                 4. Suspend a user
-                5. Show Logs
-                6. Logout
+                5. Add Discount to Area
+                6. Show Logs
+                7. Logout
                 """);
         return options(system);
     }
@@ -50,13 +50,23 @@ public class Admin extends User {
             case 2 -> system.listAllUsers();
             case 3 -> AdminAcceptingDriver(system);
             case 4 -> AdminSuspendingUser(system);
-            case 5 -> listlogs(system);
-            case 6 -> {
+            case 5 -> AddDiscount(system);
+            case 6 -> listlogs(system);
+            case 7 -> {
                 return null;
             }
 
         }
         return this;
+    }
+
+    private void AddDiscount(MainSystem system) {
+        System.out.println("------ Add 10% Discount to an Area ------");
+        System.out.println("Enter area name: ");
+        if (system.addAreaDiscounts(Main.input.nextLine()))
+            System.out.println("Area added successfully...");
+        else
+            System.out.println("Area already discounted...");
     }
 
     private void listlogs(MainSystem system) {

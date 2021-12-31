@@ -1,5 +1,6 @@
 package Users;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Info {
@@ -33,9 +34,11 @@ public class Info {
     }
 
 
+
     public String toString()
     {
-        return ("user name: " + userName + "\nmobile number: " + mobileNumber + "\nDate of Birth: " + dob +"\nEmail: " + email);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return ("user name: " + userName + "\nmobile number: " + mobileNumber + "\nDate of Birth: " + formatter.format(dob) +"\nEmail: " + email);
     }
     public String getUserName() {
         return userName;

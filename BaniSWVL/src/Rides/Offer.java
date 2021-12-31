@@ -5,11 +5,15 @@ public class Offer {
     private double price;
     private double driverRating;
     private String driverUserName;
+
     public Offer(RideRequest rideRequest, double price, String driverUserName, double driverRating) {
         this.rideRequest = rideRequest;
         this.price = price;
         this.driverUserName = driverUserName;
         this.driverRating = driverRating;
+    }
+
+    public Offer() {
     }
 
     public double getDriverRating() {
@@ -36,8 +40,11 @@ public class Offer {
         return driverUserName;
     }
 
-    public String toString()
-    {
-        return (rideRequest + "\nPrice: " + price + "\ndriver username: " + driverUserName + "\ndriver rating: " + driverRating);
+    public String toString() {
+        return (rideRequest + "\nOriginal Price: " + price + "\ndriver username: " + driverUserName + "\ndriver rating: " + driverRating);
+    }
+
+    public Offer getOffer() {
+        return this;
     }
 }

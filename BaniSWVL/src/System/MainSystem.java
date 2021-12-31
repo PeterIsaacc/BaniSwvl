@@ -3,10 +3,7 @@ package System;
 import Log.Log;
 import Rides.Offer;
 import Rides.RideRequest;
-import Users.Driver;
-import Users.Info;
-import Users.User;
-import Users.UserRating;
+import Users.*;
 
 import java.util.ArrayList;
 
@@ -30,15 +27,19 @@ public interface MainSystem {
 
     void addAdmin(User user);
 
-    public boolean clientAcceptOffer(Offer offer);
+    public boolean checkAreaDiscounts(String area);
 
-    boolean notifyDrivers(RideRequest rideRequest);
+    public boolean addAreaDiscounts(String area);
+
+    public boolean clientAcceptOffer(Offer offer, Client client);
+
+    boolean updateSystemRideRequests(RideRequest rideRequest);
 
     boolean rateDriver(UserRating userRating, String driverUserName);
 
     boolean addAreaToDriver(String area, Driver driver);
 
-    boolean driverMakingOffer(Driver driver, int index, double price);
+    boolean driverMakingOffer(Driver driver, RideRequest index, double price);
 
     void listAllUsers();
 

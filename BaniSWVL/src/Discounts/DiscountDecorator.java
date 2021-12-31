@@ -1,6 +1,7 @@
 package Discounts;
 
-import Rides.*;
+import Rides.Offer;
+import Rides.RideRequest;
 
 public abstract class DiscountDecorator extends Offer{
 
@@ -8,5 +9,9 @@ public abstract class DiscountDecorator extends Offer{
         super(rideRequest, price, driverUserName, driverRating);
     }
 
-    public abstract void adjustPrice();
+    public Offer getOffer() {
+        return offer.getOffer();
+    }
+
+    public abstract double getPrice();
 }

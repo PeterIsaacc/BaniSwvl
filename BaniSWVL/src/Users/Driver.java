@@ -17,7 +17,7 @@ public class Driver extends User {
     private double avgRating;
     private final ArrayList<UserRating> userRatings;
     private final ArrayList<Offer> offers;
-    private int currentOffer;
+    private Offer currentOffer;
     private State state;
     private ArrayList<RideRequest> rideRequests;
 
@@ -33,7 +33,7 @@ public class Driver extends User {
         offers = new ArrayList<>();
         state = State.Pending;
         avgRating = 0;
-        currentOffer = -1;
+        currentOffer = null;
     }
 
     public User displayMenu(MainSystem system) {
@@ -49,8 +49,12 @@ public class Driver extends User {
                     """);
             return options(system);
         } else if (this.state == State.Busy) {
-            System.out.println(offers.get(currentOffer));
+            if (!offers.contains(currentOffer))
+                System.out.println(currentOffer + "\nDiscounted Price: " + currentOffer.getPrice());
+            else
+                System.out.println(currentOffer);
             System.out.println("""
+                                        
                     1. Notify Driver of Arrival to pickup point
                     2. End Ride
                     3. Logout
@@ -77,15 +81,14 @@ public class Driver extends User {
 
     private void endRide(MainSystem system) {
         Date date = new Date();
-        system.getLogs().addEvent(new DestinationArrival(date, offers.get(currentOffer)));
+        system.getLogs().addEvent(new DestinationArrival(date, currentOffer.getOffer()));
         state = State.Available;
-        offers.remove(currentOffer);
-
+        offers.remove(currentOffer.getOffer());
     }
 
     private void arrivalAtLocation(MainSystem system) {
         Date date = new Date();
-        system.getLogs().addEvent(new PickupArrival(date, offers.get(currentOffer)));
+        system.getLogs().addEvent(new PickupArrival(date, currentOffer.getOffer()));
 
     }
 
@@ -122,16 +125,18 @@ public class Driver extends User {
     }
 
     public boolean listRides(MainSystem system) {
-        if (system.getRideRequests().size() == 0) {
-            System.out.println("no rides exist yet");
-            System.out.println();
-            return true;
-        }
         rideRequests = new ArrayList<>();
         for (RideRequest rideRequest : system.getRideRequests()) {
             if (system.checkdriver(this, rideRequest.getSource()))
                 rideRequests.add(rideRequest);
         }
+
+        if (rideRequests.size() == 0) {
+            System.out.println("no rides exist yet");
+            System.out.println();
+            return true;
+        }
+
         for (RideRequest rideRequest : rideRequests) {
             System.out.println(rideRequest);
             System.out.println();
@@ -229,9 +234,11 @@ public class Driver extends User {
             System.out.println("Enter price: ");
             double price = Main.input.nextDouble();
             Main.input.nextLine();
-            boolean success = system.driverMakingOffer(this, index, price);
-            if (success) System.out.println("Offer made successfully...");
-            else System.out.println("Invalid index");
+            if (index >= rideRequests.size()) System.out.println("Invalid index");
+            else {
+                boolean success = system.driverMakingOffer(this, rideRequests.get(index), price); // TODO fix bug
+                if (success) System.out.println("Offer made successfully...");
+            }
         }
     }
     //end of displayMenu functions
@@ -241,11 +248,11 @@ public class Driver extends User {
         return offers;
     }
 
-    public int getCurrentOffer() {
+    public Offer getCurrentOffer() {
         return currentOffer;
     }
 
-    public void setCurrentOffer(int currentOffer) {
+    public void setCurrentOffer(Offer currentOffer) {
         this.currentOffer = currentOffer;
     }
 }

@@ -34,6 +34,6 @@ public class RideRequest {
     }
     public String toString()
     {
-      return ("user name: " + clientUserName +"\nsource: " + source +"\ndestination: " + destination);
+      return ("user name: " + clientUserName +"\nsource: " + source +"\ndestination: " + destination + "\nPassengers: " + numberOfPassengers);
     }
 }

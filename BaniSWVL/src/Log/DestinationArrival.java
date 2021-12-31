@@ -19,8 +19,8 @@ public class DestinationArrival implements Event {
     @Override
     public String toString() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return ("Event Type: Captain arrived to user location\n"
-                + "Event Time: " + this.eventTime + "\n"
+        return ("Event Type: Captain arrived to user Destination\n"
+                + "Event Time: " + formatter.format(this.eventTime) + "\n"
                 + "Captain's Name: " + this.driverUserName
                 + "\nUser's Name: " + this.clientUserName);
     }
