@@ -4,7 +4,7 @@ public class RideRequest {
     private final String source;
     private final String destination;
     private final String clientUserName;
-    private int numberOfPassengers;
+    public int numberOfPassengers;
     public RideRequest(String src, String dest, String userName, int numberOfPassengers)
     {
         source = src;

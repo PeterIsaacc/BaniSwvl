@@ -6,19 +6,19 @@ import java.util.Date;
 public class Info {
     private String userName;
     private String mobileNumber;
-    private String dob;
+    private Date dob;
     private String email;
     private String password;
 
-    public String getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 
-    public Info(String userName, String mobileNumber, String email, String password, String dob) {
+    public Info(String userName, String mobileNumber, String email, String password, Date dob) {
         this.userName = userName;
         this.mobileNumber = mobileNumber;
         this.email = email;
