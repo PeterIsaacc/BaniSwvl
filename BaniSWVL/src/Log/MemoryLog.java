@@ -1,7 +1,5 @@
 package Log;
 
-import Rides.Offer;
-
 import java.util.ArrayList;
 
 public class MemoryLog implements Log {
