@@ -90,6 +90,9 @@ public class Driver extends User {
         Date date = new Date();
         system.getLogs().addEvent(new PickupArrival(date, currentOffer.getOffer()));
 
+        Client user = (Client) system.getUser(currentOffer.getRideRequest().getClientUserName());
+        user.setNumberofrides(user.getNumberofrides() + 1);
+
     }
 
     public User options(MainSystem system) {

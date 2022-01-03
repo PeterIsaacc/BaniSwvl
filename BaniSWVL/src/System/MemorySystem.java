@@ -129,10 +129,7 @@ public class MemorySystem implements MainSystem {
         String area = rideRequest.getSource();
         rideRequests.add(rideRequest);
         System.out.println("database updated");
-        if (AreaToDriverMap.containsKey(area)) {
-            return true;
-        }
-        return false;
+        return AreaToDriverMap.containsKey(area);
     }
 
     public boolean rateDriver(UserRating userRating, String driverUserName) {
@@ -173,8 +170,10 @@ public class MemorySystem implements MainSystem {
 
     public boolean clientAcceptOffer(Offer offer, Client client) {
 
-        rideRequests.remove(offer.getRideRequest());
         Driver driver = (Driver) userDatabase.get(offer.getDriverUserName());
+
+        if (driver.getState() == State.Busy) return false;
+        rideRequests.remove(offer.getRideRequest());
 
         Date date = new Date();
         logs.addEvent(new RideAcceptance(date, offer.getRideRequest()));

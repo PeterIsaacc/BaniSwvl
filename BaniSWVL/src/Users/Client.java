@@ -153,10 +153,12 @@ public class Client extends User {
         Scanner input = new Scanner(System.in);
         System.out.println("Which offer do you want to Accept? (enter an index starting from 1)");
         int choice = input.nextInt();
-        system.clientAcceptOffer(offers.get(choice - 1), this);
-
-        numberofrides++;
-        offers.remove(choice - 1);
+        if (system.clientAcceptOffer(offers.get(choice - 1), this)) {
+            System.out.println("the driver has been notified");
+            offers.remove(choice - 1);
+        }
+        else
+            System.out.println("Driver is busy right now");
     }
 
 

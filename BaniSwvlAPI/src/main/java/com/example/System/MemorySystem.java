@@ -168,8 +168,10 @@ public class MemorySystem implements MainSystem {
     }
     public boolean clientAcceptOffer(Offer offer, Client client) {
 
-        rideRequests.remove(offer.getRideRequest());
         Driver driver = (Driver) userDatabase.get(offer.getDriverUserName());
+
+        if (driver.getState() == State.Busy) return false;
+        rideRequests.remove(offer.getRideRequest());
 
         Date date = new Date();
         logs.addEvent(new RideAcceptance(date, offer.getRideRequest()));
