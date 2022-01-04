@@ -1,6 +1,6 @@
-package com.example.Discounts;
+package Discounts;
 
-import com.example.Rides.Offer;
+import Rides.Offer;
 
 public class AreaDiscount extends DiscountDecorator {
     public AreaDiscount(Offer offer) {
@@ -10,8 +10,14 @@ public class AreaDiscount extends DiscountDecorator {
 
     @Override
     public double getPrice() {
-        double value = offer.getPrice();
-        return value - (value * 0.1);
+        double value = offer.getOffer().getPrice();
+        double dis = getDiscount();
+        return value - (value * dis);
+    }
+
+    @Override
+    public double getDiscount() {
+        return offer.getDiscount() + 0.1;
     }
 
     @Override

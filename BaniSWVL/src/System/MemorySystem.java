@@ -1,9 +1,6 @@
 package System;
 
-import Discounts.BirthdayDiscount;
-import Discounts.FirstRideDiscount;
-import Discounts.PublicHolidayDiscount;
-import Discounts.TwoPassengerDiscount;
+import Discounts.*;
 import Log.Log;
 import Log.MemoryLog;
 import Log.RideAcceptance;
@@ -199,6 +196,10 @@ public class MemorySystem implements MainSystem {
                 offer = new PublicHolidayDiscount(offer);
             }
         }
+
+        if (AreaDiscounts.contains(offer.getRideRequest().getDestination()))
+            offer = new AreaDiscount(offer);
+
 
         driver.setState(State.Busy);
         driver.setCurrentOffer(offer);

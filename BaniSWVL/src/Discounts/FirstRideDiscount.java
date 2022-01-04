@@ -2,7 +2,7 @@ package Discounts;
 
 import Rides.Offer;
 
-public class FirstRideDiscount extends DiscountDecorator{
+public class FirstRideDiscount extends DiscountDecorator {
 
     public FirstRideDiscount(Offer offer) {
         super(offer);
@@ -11,12 +11,18 @@ public class FirstRideDiscount extends DiscountDecorator{
 
     @Override
     public double getPrice() {
-        double value = offer.getPrice();
-        return value - (value * 0.1);
+        double value = offer.getOffer().getPrice();
+        double dis = getDiscount();
+        return value - (value * dis);
     }
 
     @Override
-    public String toString(){
+    public double getDiscount() {
+        return offer.getDiscount() + 0.1;
+    }
+
+    @Override
+    public String toString() {
         return (offer.toString() + "\nwith a 10% discount from FirstRideDiscount");
     }
 }

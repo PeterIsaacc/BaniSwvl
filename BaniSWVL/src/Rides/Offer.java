@@ -16,6 +16,9 @@ public class Offer {
     public Offer() {
     }
 
+    public double getDiscount(){
+        return 0;
+    }
     public double getDriverRating() {
         return driverRating;
     }
