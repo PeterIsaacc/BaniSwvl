@@ -1,17 +1,13 @@
-package com.example.System;
+package System;
 
-import com.example.Discounts.BirthdayDiscount;
-import com.example.Discounts.FirstRideDiscount;
-import com.example.Discounts.PublicHolidayDiscount;
-import com.example.Discounts.TwoPassengerDiscount;
-import com.example.Log.*;
-
-import com.example.Log.MemoryLog;
-import com.example.Log.RideAcceptance;
-import com.example.Log.RideSetPrice;
-import com.example.Rides.Offer;
-import com.example.Rides.RideRequest;
-import com.example.Users.*;
+import Discounts.*;
+import Log.Log;
+import Log.MemoryLog;
+import Log.RideAcceptance;
+import Log.RideSetPrice;
+import Rides.Offer;
+import Rides.RideRequest;
+import Users.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,12 +44,7 @@ public class MemorySystem implements MainSystem {
             return AreaToDriverMap.get(Area).contains(d.getUserData().getUserName());
         return false;
     }
-    public boolean checkPendingDrivers(String userName) {
-        for (Driver pendingDriver : pendingDrivers) {
-            if (pendingDriver.getUserData().getUserName().equals(userName)) {return true;}
-        }
-        return false;
-    }
+
     public ArrayList<RideRequest> getRideRequests() {
         return rideRequests;
     }
@@ -65,6 +56,7 @@ public class MemorySystem implements MainSystem {
     public Log getLogs() {
         return logs;
     }
+
     public void setLogs(Log logs) {
         this.logs = logs;
     }
@@ -87,12 +79,24 @@ public class MemorySystem implements MainSystem {
     }
 
     public User login(String username, String password) {
-        User user = userDatabase.get(username);
-        if(user == null)
-            return null;
-        if (user.getUserData().getPassword().equals(password)) {
+        if (userDatabase.get(username).getUserData().getPassword().equals(password)) {
+            User user = userDatabase.get(username);
+            if (user instanceof Admin)
                 return user;
-        }
+            if (user instanceof Driver) {
+                if (((Driver) user).getState() == State.Suspended) {
+                    System.out.println("This account is suspended");
+                } else if (((Driver) user).getState() == State.Pending) {
+                    System.out.println("This account is pending");
+                } else return user;
+            } else if (user instanceof Client) {
+                if (((Client) user).getState() == State.Suspended) {
+                    System.out.println("This account is suspended");
+                } else return user;
+            }
+
+        } else
+            System.out.println("username or password is wrong");
         return null;
     }
 
@@ -122,10 +126,7 @@ public class MemorySystem implements MainSystem {
         String area = rideRequest.getSource();
         rideRequests.add(rideRequest);
         System.out.println("database updated");
-        if (AreaToDriverMap.containsKey(area)) {
-            return true;
-        }
-        return false;
+        return AreaToDriverMap.containsKey(area);
     }
 
     public boolean rateDriver(UserRating userRating, String driverUserName) {
@@ -163,9 +164,7 @@ public class MemorySystem implements MainSystem {
 
         return true;
     }
-    public ArrayList<Driver> ListPendingDrivers() {
-        return pendingDrivers;
-    }
+
     public boolean clientAcceptOffer(Offer offer, Client client) {
 
         Driver driver = (Driver) userDatabase.get(offer.getDriverUserName());
@@ -198,6 +197,10 @@ public class MemorySystem implements MainSystem {
             }
         }
 
+        if (AreaDiscounts.contains(offer.getRideRequest().getDestination()))
+            offer = new AreaDiscount(offer);
+
+
         driver.setState(State.Busy);
         driver.setCurrentOffer(offer);
 
@@ -210,13 +213,6 @@ public class MemorySystem implements MainSystem {
             System.out.println();
         }
         System.out.println();
-    }
-    public ArrayList<User> getAllUsers() {
-        ArrayList<User> users = new ArrayList<User>();
-        for (Map.Entry<String, User> e : userDatabase.entrySet()) {
-            users.add(e.getValue());
-        }
-        return users;
     }
 
     public boolean listPendingDrivers() {

@@ -10,11 +10,18 @@ public class TwoPassengerDiscount extends DiscountDecorator {
 
     @Override
     public double getPrice() {
-        double value = offer.getPrice();
-        return value - (value * 0.05);
+        double value = offer.getOffer().getPrice();
+        double dis = getDiscount();
+        return value - (value * dis);
     }
+
     @Override
-    public String toString(){
+    public double getDiscount() {
+        return offer.getDiscount() + 0.05;
+    }
+
+    @Override
+    public String toString() {
         return (offer.toString() + "\nwith a 5% discount from TwoPassengerDiscount");
     }
 }
